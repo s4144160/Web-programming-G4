@@ -17,6 +17,7 @@ COSC3060 Web Programming Studio - Group Assignment (Web Programming G4)
 | David Huang | Shared `base.css` (site-wide styling) and homepage (`index.html`) |
 
 ## Project Structure
+\\\
 project-repo/
 ├── README.md
 ├── index.html
@@ -30,6 +31,7 @@ project-repo/
 ├── cart/
 ├── blog/
 ├── reviews/
+\\\
 
 ## Notes
 - Module assignments for A and C are still being confirmed in group chat; this README will be updated once finalized.
