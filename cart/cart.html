@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="../assets/base.css">
     <link rel="stylesheet" href="../assets/cart-admin.css">
 </head>
-<body>
+<body class="cart-module-page">
 
     <header class="site-header">
         <nav class="navbar">
@@ -32,9 +32,7 @@
 
     <div class="container cart-page">
         <header class="module-heading">
-            <p class="module-heading__eyebrow">Your selected textbooks</p>
             <h1>Shopping Cart</h1>
-            <p>Review your secondhand textbooks, update quantities, and enter delivery details before placing your order.</p>
         </header>
 
         <section class="cart-section" aria-labelledby="cart-items-heading">
@@ -146,116 +144,10 @@
                         <div class="order-summary__total"><dt>Total</dt><dd>4,180,000₫</dd></div>
                     </dl>
                     <a class="cart-action cart-action--secondary" href="products.html">Continue Shopping</a>
-                    <a class="cart-action cart-action--primary" href="#checkout">Proceed to Checkout</a>
+                    <a class="cart-action cart-action--primary" href="checkout.html">Proceed to Checkout</a>
                     <p class="order-summary__note">Prices are shown in Vietnamese dong (VND).</p>
                 </aside>
             </div>
-        </section>
-
-        <section class="checkout-section" id="checkout" aria-labelledby="checkout-heading">
-            <div class="section-heading-row">
-                <div>
-                    <p class="module-heading__eyebrow">Secure checkout simulation</p>
-                    <h2 id="checkout-heading">Delivery and payment</h2>
-                    <p>Enter sample details below. This Assignment 1 form does not process payments.</p>
-                </div>
-            </div>
-
-            <form class="checkout-form" action="#" method="post">
-                <fieldset>
-                    <legend>Delivery details</legend>
-                    <div class="checkout-form__grid">
-                        <div class="checkout-field checkout-field--wide">
-                            <label for="full-name">Full name</label>
-                            <input type="text" id="full-name" name="full-name" autocomplete="name" placeholder="Dam Vinh Hung">
-                        </div>
-                        <div class="checkout-field">
-                            <label for="email">Email</label>
-                            <input type="email" id="email" name="email" autocomplete="email" placeholder="damvinhhung@example.com">
-                        </div>
-                        <div class="checkout-field">
-                            <label for="phone">Phone number</label>
-                            <input type="tel" id="phone" name="phone" autocomplete="tel" placeholder="0123 456 789">
-                        </div>
-                        <div class="checkout-field checkout-field--wide">
-                            <label for="street-address">Street address</label>
-                            <input type="text" id="street-address" name="street-address" autocomplete="street-address" placeholder="123 Nguyen Hue Street">
-                        </div>
-                        <div class="checkout-field">
-                            <label for="district-ward">District/Ward</label>
-                            <input type="text" id="district-ward" name="district-ward" autocomplete="address-level2" placeholder="District 1 / Ben Nghe Ward">
-                        </div>
-                        <div class="checkout-field">
-                            <label for="province-city">Province/City</label>
-                            <select id="province-city" name="province-city" autocomplete="address-level1">
-                                <option value="">Select a province/city</option>
-                                <option>Ho Chi Minh City</option>
-                                <option>Ha Noi</option>
-                                <option>Da Nang</option>
-                                <option>Can Tho</option>
-                                <option>Hai Phong</option>
-                                <option>Binh Duong</option>
-                                <option>Dong Nai</option>
-                                <option>Ba Ria - Vung Tau</option>
-                            </select>
-                        </div>
-                        <div class="checkout-field">
-                            <label for="postcode">Postal code</label>
-                            <input type="text" id="postcode" name="postcode" inputmode="numeric" autocomplete="postal-code" pattern="[0-9]{6}" placeholder="700000">
-                        </div>
-                        <div class="checkout-field">
-                            <label for="delivery-method">Delivery method</label>
-                            <select id="delivery-method" name="delivery-method">
-                                <option>Standard delivery — 30,000₫</option>
-                                <option>Express delivery — 60,000₫</option>
-                                <option>RMIT campus pickup — Free</option>
-                            </select>
-                        </div>
-                    </div>
-                </fieldset>
-
-                <fieldset>
-                    <legend>Payment simulation</legend>
-                    <div class="checkout-form__grid">
-                        <div class="checkout-field checkout-field--wide">
-                            <label for="cardholder-name">Cardholder name</label>
-                            <input type="text" id="cardholder-name" name="cardholder-name" autocomplete="cc-name" placeholder="Dam Vinh Hung">
-                        </div>
-                        <div class="checkout-field checkout-field--wide">
-                            <label for="card-number">Card number</label>
-                            <input type="text" id="card-number" name="card-number" inputmode="numeric" autocomplete="cc-number" placeholder="1234 5678 9012 3456">
-                        </div>
-                        <div class="checkout-field">
-                            <label for="expiry-date">Expiry date</label>
-                            <input type="text" id="expiry-date" name="expiry-date" inputmode="numeric" autocomplete="cc-exp" placeholder="06/27">
-                        </div>
-                        <div class="checkout-field">
-                            <label for="cvv">CVV</label>
-                            <input type="text" id="cvv" name="cvv" inputmode="numeric" autocomplete="cc-csc" pattern="[0-9]{3,4}" placeholder="678">
-                        </div>
-                    </div>
-                    <label class="confirmation-check" for="order-confirmation">
-                        <input type="checkbox" id="order-confirmation" name="order-confirmation">
-                        <span>I confirm that the delivery details and simulated payment information are correct.</span>
-                    </label>
-                    <button class="place-order-button" type="submit">Place Order</button>
-                </fieldset>
-            </form>
-        </section>
-
-        <section class="confirmation-panel" aria-labelledby="confirmation-heading">
-            <div class="confirmation-panel__icon" aria-hidden="true">✓</div>
-            <div>
-                <p class="module-heading__eyebrow">Preview</p>
-                <h2 id="confirmation-heading">Order confirmed</h2>
-                <p>This is an example of the confirmation shown after a successful order.</p>
-            </div>
-            <dl>
-                <div><dt>Order number</dt><dd>TS-VN-123456</dd></div>
-                <div><dt>Delivery address</dt><dd>123 Nguyen Hue Street, Ben Nghe Ward, District 1, Ho Chi Minh City 700000</dd></div>
-                <div><dt>Total paid</dt><dd>4,180,000₫ VND</dd></div>
-                <div><dt>Estimated delivery</dt><dd>2–4 business days within Vietnam</dd></div>
-            </dl>
         </section>
     </div>
 
