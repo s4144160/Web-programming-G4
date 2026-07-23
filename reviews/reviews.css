@@ -1,0 +1,35 @@
+.card__meta{
+    font-size: 1rem;
+}
+
+.card:hover{
+    transform: translateY(-4px);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.card{
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    position: relative;
+    z-index: 1;
+}
+
+div.mt-lg{
+    border-top: 1px solid var(--color-border);
+    padding-top: var(--space-md);
+}
+
+div.mt-lg:first-of-type{
+    border-top: none;
+    padding-top: 0;
+}
+
+.btn:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.btn{
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    position: relative;
+    z-index: 1;
+}
