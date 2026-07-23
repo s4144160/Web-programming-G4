@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>(Your Module's name) - TextSwap</title>
+    <title>Shopping Cart - TextSwap</title>
     <link rel="stylesheet" href="../assets/base.css">
+    <link rel="stylesheet" href="../assets/cart-admin.css">
 </head>
-<body>
+<body class="cart-module-page">
 
     <header class="site-header">
         <nav class="navbar">
@@ -29,7 +30,126 @@
     </header>
 <main>
 
-<!-- your page content goes here -->
+    <div class="container cart-page">
+        <header class="module-heading">
+            <h1>Shopping Cart</h1>
+        </header>
+
+        <section class="cart-section" aria-labelledby="cart-items-heading">
+            <div class="section-heading-row">
+                <div>
+                    <h2 id="cart-items-heading">Cart items</h2>
+                    <p>Three titles from verified TextSwap sellers.</p>
+                </div>
+                <form class="cart-toolbar" action="#" method="get" role="search">
+                    <div class="cart-toolbar__field">
+                        <label for="cart-search">Search by textbook title</label>
+                        <input type="search" id="cart-search" name="search" placeholder="Search your cart">
+                    </div>
+                    <div class="cart-toolbar__field">
+                        <label for="cart-sort">Sort cart items</label>
+                        <select id="cart-sort" name="sort">
+                            <option value="title">Product title</option>
+                            <option value="price-ascending">Price: low to high</option>
+                            <option value="price-descending">Price: high to low</option>
+                            <option value="quantity">Quantity</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+
+            <div class="cart-layout">
+                <div class="cart-items">
+                    <article class="cart-item">
+                        <figure class="cart-item__media">
+                            <img src="../assets/images/Handbook-for Mindful-Technial- Writing.webp" alt="Placeholder textbook cover for Principles of Corporate Finance, 14th Edition">
+                            <figcaption>Cover placeholder</figcaption>
+                        </figure>
+                        <div class="cart-item__details">
+                            <h3>Principles of Corporate Finance, 14th Edition</h3>
+                            <p class="cart-item__author">Richard A. Brealey, Stewart C. Myers and Franklin Allen</p>
+                            <dl class="cart-item__facts">
+                                <div><dt>Edition</dt><dd>14th Edition</dd></div>
+                                <div><dt>Subject</dt><dd>Corporate Finance</dd></div>
+                                <div><dt>Condition</dt><dd>Very good</dd></div>
+                                <div><dt>Seller</dt><dd>Nguyen Van An</dd></div>
+                            </dl>
+                        </div>
+                        <div class="cart-item__purchase">
+                            <p class="cart-item__price">1,450,000₫</p>
+                            <label class="quantity-control" for="quantity-finance">
+                                <span>Quantity</span>
+                                <input type="number" id="quantity-finance" name="quantity-finance" min="1" max="5" value="1">
+                            </label>
+                            <button class="remove-button" type="button">Remove</button>
+                        </div>
+                    </article>
+
+                    <article class="cart-item">
+                        <figure class="cart-item__media">
+                            <img src="../assets/images/The-music.webp" alt="Placeholder textbook cover for Python Crash Course, 3rd Edition">
+                            <figcaption>Cover placeholder</figcaption>
+                        </figure>
+                        <div class="cart-item__details">
+                            <h3>Python Crash Course, 3rd Edition</h3>
+                            <p class="cart-item__author">Eric Matthes</p>
+                            <dl class="cart-item__facts">
+                                <div><dt>Edition</dt><dd>3rd Edition</dd></div>
+                                <div><dt>Course</dt><dd>COMP1511 Programming Fundamentals</dd></div>
+                                <div><dt>Condition</dt><dd>Good</dd></div>
+                                <div><dt>Seller</dt><dd>Tran Thi Binh</dd></div>
+                            </dl>
+                        </div>
+                        <div class="cart-item__purchase">
+                            <p class="cart-item__price">750,000₫</p>
+                            <label class="quantity-control" for="quantity-python">
+                                <span>Quantity</span>
+                                <input type="number" id="quantity-python" name="quantity-python" min="1" max="5" value="2">
+                            </label>
+                            <button class="remove-button" type="button">Remove</button>
+                        </div>
+                    </article>
+
+                    <article class="cart-item">
+                        <figure class="cart-item__media">
+                            <img src="../assets/images/Piranesi.jpg" alt="Placeholder textbook cover for Introduction to Algorithms, 4th Edition">
+                            <figcaption>Cover placeholder</figcaption>
+                        </figure>
+                        <div class="cart-item__details">
+                            <h3>Introduction to Algorithms, 4th Edition</h3>
+                            <p class="cart-item__author">Thomas H. Cormen, Charles E. Leiserson, Ronald L. Rivest and Clifford Stein</p>
+                            <dl class="cart-item__facts">
+                                <div><dt>Edition</dt><dd>4th Edition</dd></div>
+                                <div><dt>Subject</dt><dd>Algorithms and Data Structures</dd></div>
+                                <div><dt>Condition</dt><dd>Like new</dd></div>
+                                <div><dt>Seller</dt><dd>Le Minh Chau</dd></div>
+                            </dl>
+                        </div>
+                        <div class="cart-item__purchase">
+                            <p class="cart-item__price">1,200,000₫</p>
+                            <label class="quantity-control" for="quantity-algorithms">
+                                <span>Quantity</span>
+                                <input type="number" id="quantity-algorithms" name="quantity-algorithms" min="1" max="5" value="1">
+                            </label>
+                            <button class="remove-button" type="button">Remove</button>
+                        </div>
+                    </article>
+                </div>
+
+                <aside class="order-summary" aria-labelledby="order-summary-heading">
+                    <h2 id="order-summary-heading">Order summary</h2>
+                    <dl>
+                        <div><dt>Subtotal</dt><dd>4,150,000₫</dd></div>
+                        <div><dt>Delivery fee</dt><dd>30,000₫</dd></div>
+                        <div class="order-summary__total"><dt>Total</dt><dd>4,180,000₫</dd></div>
+                    </dl>
+                    <a class="cart-action cart-action--secondary" href="products.html">Continue Shopping</a>
+                    <a class="cart-action cart-action--primary" href="checkout.html">Proceed to Checkout</a>
+                    <p class="order-summary__note">Prices are shown in Vietnamese dong (VND).</p>
+                </aside>
+            </div>
+        </section>
+    </div>
 
 </main>
 <footer class="site-footer">
