@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>(Your Module's name) - TextSwap</title>
+    <title>Browse Textbooks - TextSwap</title>
     <link rel="stylesheet" href="../assets/base.css">
+    <link rel="stylesheet" href="../assets/cart-admin.css">
 </head>
 <body>
 
@@ -16,7 +17,7 @@
             <ul class="navbar__links">
                 <li><a href="../index.html">Home</a></li>
                 <li><a href="../forum/forum-list.html">Discussion Forum</a></li>
-                <li><a href="../cart/products.html">Shopping Cart</a></li>
+                <li><a href="../cart/products.html" class="active">Shopping Cart</a></li>
                 <li><a href="../blog/blog-list.html">Blog</a></li>
                 <li><a href="../reviews/review-list.html">Reviews</a></li>
                 <li><a href="../wishlist/wishlist.html">Wishlist</a></li>
@@ -29,7 +30,140 @@
     </header>
 <main>
 
-<!-- your page content goes here -->
+    <div class="container product-page">
+        <header class="module-heading product-page__heading">
+            <p class="module-heading__eyebrow">Secondhand textbook marketplace</p>
+            <h1>Browse Textbooks</h1>
+            <p>Find affordable textbooks from other students, compare their condition and price, then add your selections to the shopping cart.</p>
+            <a class="product-cart-link" href="cart.html" aria-label="View shopping cart with three sample items">View Cart <span>3 items</span></a>
+        </header>
+
+        <section class="product-controls" aria-labelledby="product-search-heading">
+            <div>
+                <h2 id="product-search-heading">Available textbooks</h2>
+                <p>Showing realistic sample listings for the static website prototype.</p>
+            </div>
+            <form class="product-filter-form" action="#" method="get" role="search">
+                <div class="product-filter-field product-filter-field--search">
+                    <label for="product-search">Search by title, author or course</label>
+                    <input id="product-search" name="search" type="search" placeholder="e.g. Corporate Finance">
+                </div>
+                <div class="product-filter-field">
+                    <label for="subject-filter">Subject</label>
+                    <select id="subject-filter" name="subject">
+                        <option value="all">All subjects</option>
+                        <option value="business">Business and Finance</option>
+                        <option value="computing">Computing</option>
+                        <option value="health">Health Sciences</option>
+                        <option value="writing">Academic Writing</option>
+                    </select>
+                </div>
+                <div class="product-filter-field">
+                    <label for="condition-filter">Condition</label>
+                    <select id="condition-filter" name="condition">
+                        <option value="all">All conditions</option>
+                        <option value="like-new">Like new</option>
+                        <option value="very-good">Very good</option>
+                        <option value="good">Good</option>
+                    </select>
+                </div>
+                <div class="product-filter-field">
+                    <label for="product-sort">Sort by</label>
+                    <select id="product-sort" name="sort">
+                        <option value="recommended">Recommended</option>
+                        <option value="price-low">Price: low to high</option>
+                        <option value="price-high">Price: high to low</option>
+                        <option value="title">Title</option>
+                    </select>
+                </div>
+                <button class="filter-button" type="submit">Apply filters</button>
+            </form>
+        </section>
+
+        <section class="product-grid" aria-label="Available textbook listings">
+            <article class="product-card">
+                <img src="../assets/images/Handbook-for Mindful-Technial- Writing.webp" alt="Cover of a secondhand academic textbook listing">
+                <div class="product-card__body">
+                    <div class="product-card__topline"><span class="condition-tag">Very good</span><span class="product-card__course">FINA2001</span></div>
+                    <h2>Principles of Corporate Finance</h2>
+                    <p class="product-card__author">Brealey, Myers and Allen · 14th Edition</p>
+                    <dl class="product-card__details">
+                        <div><dt>Seller</dt><dd>a7</dd></div>
+                        <div><dt>Pickup</dt><dd>Melbourne CBD</dd></div>
+                    </dl>
+                    <div class="product-card__footer">
+                        <strong>$88.00</strong>
+                        <a href="cart.html" class="product-add-button">Add to Cart</a>
+                    </div>
+                </div>
+            </article>
+
+            <article class="product-card">
+                <img src="../assets/images/The-music.webp" alt="Cover of a secondhand programming textbook listing">
+                <div class="product-card__body">
+                    <div class="product-card__topline"><span class="condition-tag condition-tag--good">Good</span><span class="product-card__course">COSC1511</span></div>
+                    <h2>Python Crash Course</h2>
+                    <p class="product-card__author">Eric Matthes · 3rd Edition</p>
+                    <dl class="product-card__details">
+                        <div><dt>Seller</dt><dd>a8</dd></div>
+                        <div><dt>Pickup</dt><dd>RMIT City Campus</dd></div>
+                    </dl>
+                    <div class="product-card__footer">
+                        <strong>$46.50</strong>
+                        <a href="cart.html" class="product-add-button">Add to Cart</a>
+                    </div>
+                </div>
+            </article>
+
+            <article class="product-card">
+                <img src="../assets/images/Piranesi.jpg" alt="Cover of a secondhand algorithms textbook listing">
+                <div class="product-card__body">
+                    <div class="product-card__topline"><span class="condition-tag condition-tag--new">Like new</span><span class="product-card__course">COSC2123</span></div>
+                    <h2>Introduction to Algorithms</h2>
+                    <p class="product-card__author">Cormen, Leiserson, Rivest and Stein · 4th Edition</p>
+                    <dl class="product-card__details">
+                        <div><dt>Seller</dt><dd>a9</dd></div>
+                        <div><dt>Pickup</dt><dd>Carlton</dd></div>
+                    </dl>
+                    <div class="product-card__footer">
+                        <strong>$72.00</strong>
+                        <a href="cart.html" class="product-add-button">Add to Cart</a>
+                    </div>
+                </div>
+            </article>
+
+            <article class="product-card">
+                <img src="../assets/images/Psychiatric-Mental-Health-Nursing.webp" alt="Cover of a secondhand nursing textbook listing">
+                <div class="product-card__body">
+                    <div class="product-card__topline"><span class="condition-tag">Very good</span><span class="product-card__course">NURS2105</span></div>
+                    <h2>Psychiatric Mental Health Nursing</h2>
+                    <p class="product-card__author">Townsend and Morgan · 10th Edition</p>
+                    <dl class="product-card__details">
+                        <div><dt>Seller</dt><dd>a10</dd></div>
+                        <div><dt>Pickup</dt><dd>Bundoora Campus</dd></div>
+                    </dl>
+                    <div class="product-card__footer">
+                        <strong>$64.00</strong>
+                        <a href="cart.html" class="product-add-button">Add to Cart</a>
+                    </div>
+                </div>
+            </article>
+        </section>
+
+        <aside class="product-workflow" aria-labelledby="shopping-workflow-heading">
+            <div>
+                <p class="module-heading__eyebrow">Shopping workflow</p>
+                <h2 id="shopping-workflow-heading">From textbook listing to checkout</h2>
+            </div>
+            <ol>
+                <li><span>1</span><strong>Browse</strong><small>Search and filter available books.</small></li>
+                <li><span>2</span><strong>Add to cart</strong><small>Select a listing to save in your cart.</small></li>
+                <li><span>3</span><strong>Review</strong><small>Update quantity or remove an item.</small></li>
+                <li><span>4</span><strong>Checkout</strong><small>Enter delivery and simulated payment details.</small></li>
+            </ol>
+            <a href="cart.html" class="cart-action cart-action--primary">Open the Shopping Cart</a>
+        </aside>
+    </div>
 
 </main>
 <footer class="site-footer">

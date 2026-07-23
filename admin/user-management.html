@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>(Your Module's name) - TextSwap</title>
+    <title>User Administration - TextSwap</title>
     <link rel="stylesheet" href="../assets/base.css">
+    <link rel="stylesheet" href="../assets/cart-admin.css">
 </head>
 <body>
 
@@ -29,7 +30,173 @@
     </header>
 <main>
 
-<!-- your page content goes here -->
+    <div class="container admin-page">
+        <header class="module-heading">
+            <p class="module-heading__eyebrow">Administration workspace</p>
+            <h1>User Administration</h1>
+            <p>Review member access and lock or unlock user accounts. Locked users remain visible but cannot perform operations on TextSwap.</p>
+        </header>
+
+        <section aria-labelledby="account-summary-heading">
+            <h2 id="account-summary-heading" class="cart-admin-visually-hidden">Account summary</h2>
+            <div class="admin-summary-grid">
+                <article class="admin-summary-card">
+                    <p>Total users</p>
+                    <strong>248</strong>
+                    <span>All registered accounts</span>
+                </article>
+                <article class="admin-summary-card admin-summary-card--active">
+                    <p>Active users</p>
+                    <strong>231</strong>
+                    <span>93% of all users</span>
+                </article>
+                <article class="admin-summary-card admin-summary-card--locked">
+                    <p>Locked users</p>
+                    <strong>17</strong>
+                    <span>Require administrator review</span>
+                </article>
+                <article class="admin-summary-card admin-summary-card--admin">
+                    <p>Administrators</p>
+                    <strong>4</strong>
+                    <span>Elevated account access</span>
+                </article>
+            </div>
+        </section>
+
+        <section class="admin-directory" aria-labelledby="user-directory-heading">
+            <div class="section-heading-row">
+                <div>
+                    <h2 id="user-directory-heading">User directory</h2>
+                    <p>Search and filter registered TextSwap accounts.</p>
+                </div>
+            </div>
+
+            <form class="admin-filters" action="#" method="get" role="search">
+                <div class="admin-filter admin-filter--search">
+                    <label for="user-search">Search by username or email</label>
+                    <input type="search" id="user-search" name="user-search" placeholder="e.g. a1 or a1@example.com">
+                </div>
+                <div class="admin-filter">
+                    <label for="status-filter">Filter by account status</label>
+                    <select id="status-filter" name="status-filter">
+                        <option value="all">All statuses</option>
+                        <option value="active">Active</option>
+                        <option value="locked">Locked</option>
+                    </select>
+                </div>
+                <div class="admin-filter">
+                    <label for="role-filter">Filter by role</label>
+                    <select id="role-filter" name="role-filter">
+                        <option value="all">All roles</option>
+                        <option value="student">Student</option>
+                        <option value="instructor">Instructor</option>
+                        <option value="administrator">Administrator</option>
+                    </select>
+                </div>
+                <button class="filter-button" type="submit">Apply filters</button>
+            </form>
+
+            <aside class="admin-warning" aria-label="Locked account warning">
+                <strong>Account restriction:</strong>
+                <span>Locked users cannot buy, sell, post, review, or perform other TextSwap operations until an administrator unlocks their account.</span>
+            </aside>
+
+            <div class="user-table-wrapper">
+                <table class="user-table">
+                    <caption class="cart-admin-visually-hidden">Registered TextSwap users and account actions</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">User</th>
+                            <th scope="col">Username</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Role</th>
+                            <th scope="col">Account status</th>
+                            <th scope="col">Date joined</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td data-label="User"><span class="user-avatar" aria-label="a1 avatar">A1</span></td>
+                            <td data-label="Username"><strong>a1</strong></td>
+                            <td data-label="Email"><a href="mailto:a1@example.com">a1@example.com</a></td>
+                            <td data-label="Role">Student</td>
+                            <td data-label="Account status"><span class="status-badge status-badge--active">Active</span></td>
+                            <td data-label="Date joined"><time datetime="2025-02-18">18 Feb 2025</time></td>
+                            <td data-label="Action"><button class="account-action account-action--lock" type="button">Lock Account</button></td>
+                        </tr>
+                        <tr>
+                            <td data-label="User"><span class="user-avatar" aria-label="a2 avatar">A2</span></td>
+                            <td data-label="Username"><strong>a2</strong></td>
+                            <td data-label="Email"><a href="mailto:a2@example.com">a2@example.com</a></td>
+                            <td data-label="Role">Student</td>
+                            <td data-label="Account status"><span class="status-badge status-badge--locked">Locked</span></td>
+                            <td data-label="Date joined"><time datetime="2024-11-03">3 Nov 2024</time></td>
+                            <td data-label="Action"><button class="account-action account-action--unlock" type="button">Unlock Account</button></td>
+                        </tr>
+                        <tr>
+                            <td data-label="User"><span class="user-avatar" aria-label="a3 avatar">A3</span></td>
+                            <td data-label="Username"><strong>a3</strong></td>
+                            <td data-label="Email"><a href="mailto:a3@example.com">a3@example.com</a></td>
+                            <td data-label="Role">Instructor</td>
+                            <td data-label="Account status"><span class="status-badge status-badge--active">Active</span></td>
+                            <td data-label="Date joined"><time datetime="2024-08-26">26 Aug 2024</time></td>
+                            <td data-label="Action"><button class="account-action account-action--lock" type="button">Lock Account</button></td>
+                        </tr>
+                        <tr>
+                            <td data-label="User"><span class="user-avatar" aria-label="a4 avatar">A4</span></td>
+                            <td data-label="Username"><strong>a4</strong></td>
+                            <td data-label="Email"><a href="mailto:a4@example.com">a4@example.com</a></td>
+                            <td data-label="Role">Student</td>
+                            <td data-label="Account status"><span class="status-badge status-badge--active">Active</span></td>
+                            <td data-label="Date joined"><time datetime="2025-07-12">12 Jul 2025</time></td>
+                            <td data-label="Action"><button class="account-action account-action--lock" type="button">Lock Account</button></td>
+                        </tr>
+                        <tr>
+                            <td data-label="User"><span class="user-avatar" aria-label="a5 avatar">A5</span></td>
+                            <td data-label="Username"><strong>a5</strong></td>
+                            <td data-label="Email"><a href="mailto:a5@example.com">a5@example.com</a></td>
+                            <td data-label="Role">Student</td>
+                            <td data-label="Account status"><span class="status-badge status-badge--locked">Locked</span></td>
+                            <td data-label="Date joined"><time datetime="2025-01-30">30 Jan 2025</time></td>
+                            <td data-label="Action"><button class="account-action account-action--unlock" type="button">Unlock Account</button></td>
+                        </tr>
+                        <tr>
+                            <td data-label="User"><span class="user-avatar" aria-label="a6 avatar">A6</span></td>
+                            <td data-label="Username"><strong>a6</strong></td>
+                            <td data-label="Email"><a href="mailto:a6@example.com">a6@example.com</a></td>
+                            <td data-label="Role">Administrator</td>
+                            <td data-label="Account status"><span class="status-badge status-badge--active">Active</span></td>
+                            <td data-label="Date joined"><time datetime="2024-05-14">14 May 2024</time></td>
+                            <td data-label="Action"><button class="account-action account-action--lock" type="button">Lock Account</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <nav class="pagination" aria-label="User directory pages">
+                <a class="pagination__control" href="#">Previous</a>
+                <a href="#" aria-current="page">1</a>
+                <a href="#">2</a>
+                <a href="#">3</a>
+                <span aria-hidden="true">…</span>
+                <a href="#">42</a>
+                <a class="pagination__control" href="#">Next</a>
+            </nav>
+        </section>
+
+        <section class="admin-confirmation-panel" aria-labelledby="admin-confirmation-heading">
+            <div>
+                <p class="module-heading__eyebrow">Confirmation preview</p>
+                <h2 id="admin-confirmation-heading">Confirm account action</h2>
+                <p>You are about to lock <strong>a1</strong>. The account will no longer be able to perform TextSwap operations.</p>
+            </div>
+            <div class="admin-confirmation-panel__actions">
+                <button class="confirmation-button confirmation-button--cancel" type="button">Cancel</button>
+                <button class="confirmation-button confirmation-button--confirm" type="button">Confirm Lock</button>
+            </div>
+        </section>
+    </div>
 
 </main>
 <footer class="site-footer">
