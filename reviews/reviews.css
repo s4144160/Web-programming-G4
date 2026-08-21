@@ -33,3 +33,14 @@ div.mt-lg:first-of-type{
     position: relative;
     z-index: 1;
 }
+
+.error-message{
+    color: #d02d20;
+    font-size: 0.85rem;
+    display: block;
+    margin-top: 4px;
+}
+
+.input-invalid{
+    border-color: #d92d20 !important;
+}

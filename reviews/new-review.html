@@ -37,6 +37,7 @@
                 <div class="form-group">
                     <label for="book-title">Book Title</label>
                     <input type="text" id="book-title" name="book-title" placeholder="e.g. The Muse: Misunderstandings and Their Remedies">
+                    <span class="error-message" id="book-title-error"></span>
                 </div>
                 <div class="form-group">
                     <label for="rating">Star Rating</label>
@@ -51,10 +52,12 @@
                 <div class="form-group">
                     <label for="reviewer-name">Your Name</label>
                     <input type="text" id="reviewer-name" name="reviewer-name" placeholder="e.g. Jane Doe">
-                </div>  
+                    <span class="error-message" id="reviewer-name-error"></span>
+                </div>
                 <div class="form-group">
                     <label for="review-content">Review Content</label>
                     <textarea id="review-content" name="review-content" placeholder="Share your experience with this book or seller..."></textarea>
+                    <span class="error-message" id="reviewer-content-error"></span>
                 </div>
                 <div class="form-group">
                     <label for="review-image">Upload an Image (optional)</label>
@@ -79,5 +82,6 @@
             </p>
         </div>
     </footer>
+    <script src="reviews.js"></script>
 </body>
 </html>
