@@ -6,6 +6,7 @@
     <title>Order Confirmation - TextSwap</title>
     <link rel="stylesheet" href="../assets/base.css">
     <link rel="stylesheet" href="../assets/cart-admin.css">
+    <script src="cart.js" defer></script>
 </head>
 <body class="cart-module-page">
 
@@ -32,33 +33,34 @@
 
     <div class="container cart-page confirmation-page">
         <section class="confirmation-hero" aria-labelledby="confirmation-heading">
-            <div class="confirmation-hero__icon" aria-hidden="true">✓</div>
-            <p class="module-heading__eyebrow">Purchase complete</p>
-            <h1 id="confirmation-heading">Order Confirmed</h1>
-            <p>Thank you, Dam Vinh Hung, for your purchase. Your textbook order has been received.</p>
-            <div class="confirmation-meta">
-                <p><span>Order number</span><strong>TS-123456</strong></p>
-                <p><span>Order date</span><strong>23 July 2026</strong></p>
+            <div class="confirmation-hero__icon" data-confirmation-icon aria-hidden="true">!</div>
+            <p class="module-heading__eyebrow" data-confirmation-eyebrow>Order status</p>
+            <h1 id="confirmation-heading" data-confirmation-heading>No Completed Order</h1>
+            <p data-confirmation-message>No completed order was found. Add a textbook and complete checkout first.</p>
+            <div class="confirmation-meta" data-confirmation-meta hidden>
+                <p><span>Order number</span><strong data-confirmation-number></strong></p>
+                <p><span>Order date</span><strong data-confirmation-date></strong></p>
             </div>
         </section>
 
+        <div data-confirmation-details hidden>
         <div class="confirmation-grid">
             <section class="confirmation-card" aria-labelledby="customer-heading">
                 <h2 id="customer-heading">Customer details</h2>
                 <address>
-                    <strong>Dam Vinh Hung</strong>
-                    <a href="mailto:damvinhhung@example.com">damvinhhung@example.com</a>
-                    <a href="tel:0123456789">0123456789</a>
+                    <strong data-confirmation-customer></strong>
+                    <a data-confirmation-email></a>
+                    <a data-confirmation-phone></a>
                 </address>
             </section>
 
             <section class="confirmation-card" aria-labelledby="delivery-heading">
                 <h2 id="delivery-heading">Delivery information</h2>
                 <address>
-                    <strong>123 Đường Nguyễn Huệ</strong>
-                    <span>Phường Bến Nghé, Quận 1</span>
-                    <span>Thành phố Hồ Chí Minh</span>
-                    <span>Postal code: 700000</span>
+                    <strong data-confirmation-street></strong>
+                    <span data-confirmation-district></span>
+                    <span data-confirmation-city></span>
+                    <span data-confirmation-postcode></span>
                 </address>
             </section>
         </div>
@@ -74,23 +76,7 @@
                             <th scope="col">Price</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>Principles of Corporate Finance, 14th Edition</td>
-                            <td>1</td>
-                            <td>1,450,000₫</td>
-                        </tr>
-                        <tr>
-                            <td>Python Crash Course, 3rd Edition</td>
-                            <td>2</td>
-                            <td>1,500,000₫</td>
-                        </tr>
-                        <tr>
-                            <td>Introduction to Algorithms, 4th Edition</td>
-                            <td>1</td>
-                            <td>1,200,000₫</td>
-                        </tr>
-                    </tbody>
+                    <tbody data-confirmation-items></tbody>
                 </table>
             </div>
         </section>
@@ -99,22 +85,23 @@
             <section class="confirmation-card" aria-labelledby="payment-summary-heading">
                 <h2 id="payment-summary-heading">Payment summary</h2>
                 <dl class="payment-summary">
-                    <div><dt>Subtotal</dt><dd>4,150,000₫</dd></div>
-                    <div><dt>Delivery fee</dt><dd>30,000₫</dd></div>
-                    <div class="payment-summary__total"><dt>Total paid</dt><dd>4,180,000₫ VND</dd></div>
+                    <div><dt>Subtotal</dt><dd data-confirmation-subtotal></dd></div>
+                    <div><dt>Delivery fee</dt><dd data-confirmation-delivery></dd></div>
+                    <div class="payment-summary__total"><dt>Total paid</dt><dd data-confirmation-total></dd></div>
                 </dl>
             </section>
 
             <section class="confirmation-card" aria-labelledby="delivery-status-heading">
                 <h2 id="delivery-status-heading">Delivery details</h2>
                 <dl class="delivery-status">
-                    <div><dt>Delivery method</dt><dd>Standard delivery</dd></div>
+                    <div><dt>Delivery method</dt><dd data-confirmation-method></dd></div>
                     <div><dt>Estimated delivery</dt><dd>2–4 business days within Vietnam</dd></div>
                 </dl>
             </section>
         </div>
 
         <p class="prototype-note"><strong>Prototype note:</strong> This is a simulated order for the static TextSwap prototype. No payment was processed and no textbooks will be delivered.</p>
+        </div>
 
         <nav class="confirmation-actions" aria-label="Order confirmation actions">
             <a class="cart-action cart-action--primary" href="products.html">Continue Shopping</a>

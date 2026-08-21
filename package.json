@@ -1,0 +1,12 @@
+{
+  "name": "textswap-shopping-cart",
+  "version": "1.0.0",
+  "description": "COSC3060 TextSwap Shopping Cart prototype",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
