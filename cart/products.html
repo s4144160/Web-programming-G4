@@ -6,6 +6,7 @@
     <title>Browse Textbooks - TextSwap</title>
     <link rel="stylesheet" href="../assets/base.css">
     <link rel="stylesheet" href="../assets/cart-admin.css">
+    <script src="cart.js" defer></script>
 </head>
 <body>
 
@@ -35,7 +36,8 @@
             <p class="module-heading__eyebrow">Secondhand textbook marketplace</p>
             <h1>Browse Textbooks</h1>
             <p>Find affordable textbooks from other students, compare their condition and price, then add your selections to the shopping cart.</p>
-            <a class="product-cart-link" href="cart.html" aria-label="View shopping cart with three sample items">View Cart <span>3 items</span></a>
+            <a class="product-cart-link" href="cart.html" aria-label="View shopping cart">View Cart <span data-cart-count>0 items</span></a>
+            <p class="product-cart-feedback" data-product-feedback role="status" aria-live="polite"></p>
         </header>
 
         <section class="product-controls" aria-labelledby="product-search-heading">
@@ -80,74 +82,8 @@
             </form>
         </section>
 
-        <section class="product-grid" aria-label="Available textbook listings">
-            <article class="product-card">
-                <img src="../assets/images/Handbook-for Mindful-Technial- Writing.webp" alt="Cover of a secondhand academic textbook listing">
-                <div class="product-card__body">
-                    <div class="product-card__topline"><span class="condition-tag">Very good</span><span class="product-card__course">FINA2001</span></div>
-                    <h2>Principles of Corporate Finance</h2>
-                    <p class="product-card__author">Brealey, Myers and Allen · 14th Edition</p>
-                    <dl class="product-card__details">
-                        <div><dt>Seller</dt><dd>a7</dd></div>
-                        <div><dt>Pickup</dt><dd>Melbourne CBD</dd></div>
-                    </dl>
-                    <div class="product-card__footer">
-                        <strong>$88.00</strong>
-                        <a href="cart.html" class="product-add-button">Add to Cart</a>
-                    </div>
-                </div>
-            </article>
-
-            <article class="product-card">
-                <img src="../assets/images/The-music.webp" alt="Cover of a secondhand programming textbook listing">
-                <div class="product-card__body">
-                    <div class="product-card__topline"><span class="condition-tag condition-tag--good">Good</span><span class="product-card__course">COSC1511</span></div>
-                    <h2>Python Crash Course</h2>
-                    <p class="product-card__author">Eric Matthes · 3rd Edition</p>
-                    <dl class="product-card__details">
-                        <div><dt>Seller</dt><dd>a8</dd></div>
-                        <div><dt>Pickup</dt><dd>RMIT City Campus</dd></div>
-                    </dl>
-                    <div class="product-card__footer">
-                        <strong>$46.50</strong>
-                        <a href="cart.html" class="product-add-button">Add to Cart</a>
-                    </div>
-                </div>
-            </article>
-
-            <article class="product-card">
-                <img src="../assets/images/Piranesi.jpg" alt="Cover of a secondhand algorithms textbook listing">
-                <div class="product-card__body">
-                    <div class="product-card__topline"><span class="condition-tag condition-tag--new">Like new</span><span class="product-card__course">COSC2123</span></div>
-                    <h2>Introduction to Algorithms</h2>
-                    <p class="product-card__author">Cormen, Leiserson, Rivest and Stein · 4th Edition</p>
-                    <dl class="product-card__details">
-                        <div><dt>Seller</dt><dd>a9</dd></div>
-                        <div><dt>Pickup</dt><dd>Carlton</dd></div>
-                    </dl>
-                    <div class="product-card__footer">
-                        <strong>$72.00</strong>
-                        <a href="cart.html" class="product-add-button">Add to Cart</a>
-                    </div>
-                </div>
-            </article>
-
-            <article class="product-card">
-                <img src="../assets/images/Psychiatric-Mental-Health-Nursing.webp" alt="Cover of a secondhand nursing textbook listing">
-                <div class="product-card__body">
-                    <div class="product-card__topline"><span class="condition-tag">Very good</span><span class="product-card__course">NURS2105</span></div>
-                    <h2>Psychiatric Mental Health Nursing</h2>
-                    <p class="product-card__author">Townsend and Morgan · 10th Edition</p>
-                    <dl class="product-card__details">
-                        <div><dt>Seller</dt><dd>a10</dd></div>
-                        <div><dt>Pickup</dt><dd>Bundoora Campus</dd></div>
-                    </dl>
-                    <div class="product-card__footer">
-                        <strong>$64.00</strong>
-                        <a href="cart.html" class="product-add-button">Add to Cart</a>
-                    </div>
-                </div>
-            </article>
+        <section class="product-grid" aria-label="Available textbook listings" data-product-grid>
+            <p>Loading textbooks...</p>
         </section>
 
         <aside class="product-workflow" aria-labelledby="shopping-workflow-heading">
