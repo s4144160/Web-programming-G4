@@ -56,12 +56,14 @@
                 </div>
                 <div class="form-group">
                     <label for="review-content">Review Content</label>
-                    <textarea id="review-content" name="review-content" placeholder="Share your experience with this book or seller..."></textarea>
+                    <textarea id="review-content" name="review-content" maxlength="500" placeholder="Share your experience with this book or seller..."></textarea>
+                    <span class="char-counter" id="review-content-counter">500 characters remaining</span>
                     <span class="error-message" id="reviewer-content-error"></span>
                 </div>
                 <div class="form-group">
                     <label for="review-image">Upload an Image (optional)</label>
-                    <input type="file" id="review-image" name="review-image" accept="image/*">
+                    <input type="file" id="review-image" name="review-image" accept="image/png, image/jpeg, image/webp">
+                    <span class="error-message" id="review-image-error"></span>
                 </div>
 
                 <button type="submit" class="btn btn-primary">Submit Review</button>

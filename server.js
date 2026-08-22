@@ -89,9 +89,49 @@ let products = [
     }
 ];
 
-// Later this cart can be stored using req.session.userId from the team login system.
 let cart = [];
 let orders = [];
+
+
+let reviews = [
+    {
+        id: 1,
+        bookTitle: "The Muse: Misunderstandings and Their Remedies",
+        rating: 4,
+        reviewerName: "Sarah Mitchell",
+        content: "I really appreciate the text's emphasis on essays about writing, which makes the text personable and approachable.",
+        userId: 101,
+        createdAt: "2026-07-20T09:00:00Z"
+    },
+    {
+        id: 2,
+        bookTitle: "Psychiatric-Mental Health Nursing",
+        rating: 5,
+        reviewerName: "James Carter",
+        content: "This is a comprehensive open educational resource (OER) textbook that more than adequately covers the essential topics in Psychiatric Mental Health Nursing. It was a pleasure to review this text. I would recommend it as a primary text for undergraduate Mental Health Nursing courses.",
+        userId: 102,
+        createdAt: "2026-07-22T13:15:00Z"
+    },
+    {
+        id: 3,
+        bookTitle: "Handbook for Mindful Technical Writing: A Practical Guide for University Students and Professionals - 2026 Edition",
+        rating: 3,
+        reviewerName: "Maria Gonzalez",
+        content: "This open textbook was compiled with the Americans with Disabilities Act in mind and in compliance with the Web Content Accessibility Guidelines 2.2 (WCAG 2.2). It is optimized for people who use screen-reader technology. All content can be navigated using a keyboard; all images have alt text tags; and information is not conveyed solely by color.",
+        userId: 103,
+        createdAt: "2026-07-25T10:30:00Z"
+    },
+    {
+        id: 4,
+        bookTitle: "Introduction to Algorithms",
+        rating: 5,
+        reviewerName: "Alice Chen",
+        content: "Great condition, exactly as described. Would buy from this seller again. Added as a new review to demonstrate the A2 dynamic create feature.",
+        userId: 101,
+        createdAt: "2026-08-14T11:20:00Z"
+    }
+];
+let nextReviewId = 5;
 
 function findProduct(id) {
     let found = null;
@@ -138,6 +178,45 @@ function deliveryFee(method) {
         return 0;
     }
     return 0;
+}
+
+function findReview(id) {
+    let found = null;
+
+    for (let i = 0; i < reviews.length; i++) {
+        if (reviews[i].id === id) {
+            found = reviews[i];
+        }
+    }
+    return found;
+}
+
+function getCurrentReviewUser(req) {
+    let userId = req.query.userId || (req.body && req.body.userId) || 101;
+    return { id: Number(userId) };
+}
+
+function validateReviewData(data) {
+    let errors = [];
+
+    if (typeof data.bookTitle !== "string" || data.bookTitle.trim().length === 0) {
+        errors.push("Book title is required.");
+    }
+    if (typeof data.reviewerName !== "string" || data.reviewerName.trim().length === 0) {
+        errors.push("Reviewer name is required.");
+    }
+    if (typeof data.content !== "string" || data.content.trim().length === 0) {
+        errors.push("Review content is required.");
+    } else if (data.content.length > 500) {
+        errors.push("Review content must be under 500 characters.");
+    }
+
+    let ratingNum = Number(data.rating);
+    if (!ratingNum || ratingNum < 1 || ratingNum > 5) {
+        errors.push("Rating must be a number between 1 and 5.");
+    }
+
+    return errors;
 }
 
 app.get("/api/products", function (req, res) {
@@ -283,7 +362,6 @@ app.post("/api/orders", function (req, res) {
         return res.status(400).json({ error: "The cart is empty." });
     }
 
-    // calculate total on server
     let items = getCartData();
     let subtotal = 0;
     for (let i = 0; i < items.length; i++) {
@@ -312,7 +390,6 @@ app.post("/api/orders", function (req, res) {
         }
     };
 
-    // save order, but never save card details
     orders.push(order);
     cart = [];
     res.status(201).json({ message: "Order created.", orderId: order.id });
@@ -331,6 +408,87 @@ app.get("/api/orders/:id", function (req, res) {
         return res.status(404).json({ error: "Order was not found." });
     }
     res.json(order);
+});
+
+app.get("/api/reviews", function (req, res) {
+    res.json(reviews);
+});
+
+app.get("/api/reviews/:id", function (req, res) {
+    let review = findReview(Number(req.params.id));
+
+    if (!review) {
+        return res.status(404).json({ message: "Review not found." });
+    }
+    res.json(review);
+});
+
+app.post("/api/reviews", function (req, res) {
+    let errors = validateReviewData(req.body);
+    if (errors.length > 0) {
+        return res.status(400).json({ message: errors.join(" ") });
+    }
+
+    let currentUser = getCurrentReviewUser(req);
+    let newReview = {
+        id: nextReviewId,
+        bookTitle: req.body.bookTitle.trim(),
+        rating: Number(req.body.rating),
+        reviewerName: req.body.reviewerName.trim(),
+        content: req.body.content.trim(),
+        userId: currentUser.id,
+        createdAt: new Date().toISOString()
+    };
+    nextReviewId = nextReviewId + 1;
+
+    reviews.push(newReview);
+    res.status(201).json(newReview);
+});
+
+app.put("/api/reviews/:id", function (req, res) {
+    let review = findReview(Number(req.params.id));
+    if (!review) {
+        return res.status(404).json({ message: "Review not found." });
+    }
+
+    let currentUser = getCurrentReviewUser(req);
+    if (review.userId !== currentUser.id) {
+        return res.status(403).json({ message: "You can only edit your own reviews." });
+    }
+
+    let errors = validateReviewData(req.body);
+    if (errors.length > 0) {
+        return res.status(400).json({ message: errors.join(" ") });
+    }
+
+    review.bookTitle = req.body.bookTitle.trim();
+    review.rating = Number(req.body.rating);
+    review.reviewerName = req.body.reviewerName.trim();
+    review.content = req.body.content.trim();
+
+    res.json(review);
+});
+
+app.delete("/api/reviews/:id", function (req, res) {
+    let review = findReview(Number(req.params.id));
+    if (!review) {
+        return res.status(404).json({ message: "Review not found." });
+    }
+
+    let currentUser = getCurrentReviewUser(req);
+    if (review.userId !== currentUser.id) {
+        return res.status(403).json({ message: "You can only delete your own reviews." });
+    }
+
+    let index = -1;
+    for (let i = 0; i < reviews.length; i++) {
+        if (reviews[i].id === review.id) {
+            index = i;
+        }
+    }
+    reviews.splice(index, 1);
+
+    res.status(204).send();
 });
 
 app.use(express.static(path.join(__dirname)));

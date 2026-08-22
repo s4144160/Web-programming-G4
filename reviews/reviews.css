@@ -44,3 +44,42 @@ div.mt-lg:first-of-type{
 .input-invalid{
     border-color: #d92d20 !important;
 }
+
+.char-counter {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--color-text-muted, #6b7280);
+    margin-top: 4px;
+    text-align: right;
+}
+
+.counter-warning {
+    color: #d92d20;
+    font-weight: bold;
+}
+
+.review-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+}
+
+.review-controls__search {
+    flex: 1;
+    min-width: 220px;
+    padding: 8px 12px;
+    border: 1px solid var(--color-border, #d1d5db);
+    border-radius: 6px;
+}
+
+.review-controls__select {
+    padding: 8px 12px;
+    border: 1px solid var(--color-border, #d1d5db);
+    border-radius: 6px;
+}
+
+#detail-actions {
+    display: flex;
+    align-items: center;
+}
