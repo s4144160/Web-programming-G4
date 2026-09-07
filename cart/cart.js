@@ -52,10 +52,15 @@ function loadCart() {
 
 async function requestAPI(url, options) {
     const response = await fetch(url, options);
-    let data = await response.json();
+    let data;
+    try {
+        data = await response.json();
+    } catch (error) {
+        throw new Error("The server could not complete the request. Please try again.");
+    }
 
     if (!response.ok) {
-        throw new Error(data.error || "The server could not complete the request.");
+        throw new Error((data && data.error) || "The server could not complete the request.");
     }
     return data;
 }
@@ -123,6 +128,9 @@ function initialiseProductPage() {
         return;
     }
 
+    let pendingAdd = null;
+    let addedId = null;
+    let addedTimer;
     const feedback = document.querySelector("[data-product-feedback]");
     const filterForm = document.querySelector(".product-filter-form");
     const searchInput = document.querySelector("#product-search");
@@ -131,6 +139,7 @@ function initialiseProductPage() {
     const sortSelect = document.querySelector("#product-sort");
 
     function renderProducts() {
+        const focusedProductId = productGrid.contains(document.activeElement) ? document.activeElement.dataset.productId : null;
         const search = searchInput.value.trim().toLowerCase();
         let items = [];
 
@@ -184,12 +193,20 @@ function initialiseProductPage() {
                     </dl>
                     <div class="product-card__footer">
                         <strong>${formatVND(product.price)}</strong>
-                        <a href="cart.html" class="product-add-button" data-product-id="${escapeHTML(product.id)}">Add to Cart</a>
+                        <button type="button" class="product-add-button${addedId === product.id ? ' product-add-button--added' : ''}" data-product-id="${escapeHTML(product.id)}" ${pendingAdd ? 'disabled' : ''}>${pendingAdd === product.id ? 'Adding...' : addedId === product.id ? 'Added ✓' : 'Add to Cart'}</button>
                     </div>
                 </div>
             </article>`;
         }
         productGrid.innerHTML = html;
+        if (focusedProductId) {
+            const focusedButton = Array.from(productGrid.querySelectorAll("[data-product-id]")).find(function (element) {
+                return element.dataset.productId === focusedProductId;
+            });
+            if (focusedButton && !focusedButton.disabled) {
+                focusedButton.focus();
+            }
+        }
     }
 
     productGrid.addEventListener("click", async function (event) {
@@ -200,10 +217,13 @@ function initialiseProductPage() {
         event.preventDefault();
 
         const product = findProduct(button.dataset.productId);
-        if (!product) {
+        if (!product || pendingAdd) {
             return;
         }
 
+        pendingAdd = product.id;
+        announce(feedback, "Adding " + product.title + " to your cart...");
+        renderProducts();
         try {
             const data = await requestAPI("/api/cart", {
                 method: "POST",
@@ -211,11 +231,25 @@ function initialiseProductPage() {
                 body: JSON.stringify({ productId: product.id, quantity: 1 })
             });
             saveCart(data.cart);
-            button.textContent = "Added to Cart";
-            button.classList.add("product-add-button--added");
+            clearTimeout(addedTimer);
+            addedId = product.id;
+            addedTimer = setTimeout(function () {
+                addedId = null;
+                renderProducts();
+            }, 1500);
             announce(feedback, product.title + " was added to your cart.");
         } catch (error) {
+            addedId = null;
             announce(feedback, error.message);
+        } finally {
+            pendingAdd = null;
+            renderProducts();
+            const replacement = Array.from(productGrid.querySelectorAll("[data-product-id]")).find(function (element) {
+                return element.dataset.productId === product.id;
+            });
+            if (replacement && (document.activeElement === document.body || document.activeElement === button)) {
+                replacement.focus();
+            }
         }
     });
 
@@ -273,6 +307,20 @@ function initialiseCartPage() {
     const sortSelect = document.querySelector("#cart-sort");
     const feedback = document.querySelector("[data-cart-feedback]");
     const checkoutLink = document.querySelector("[data-checkout-link]");
+    // Serialize mutations because each response contains a complete cart snapshot.
+    let pendingMutation = null;
+
+    function updateMutationControls() {
+        itemsContainer.querySelectorAll("[data-cart-quantity], [data-remove-item]").forEach(function (control) {
+            control.disabled = Boolean(pendingMutation);
+            if (control.dataset.removeItem) {
+                control.textContent = pendingMutation && pendingMutation.kind === "remove" &&
+                    pendingMutation.id === control.dataset.removeItem ? "Removing..." : "Remove";
+            }
+        });
+        checkoutLink.classList.toggle("cart-action--disabled", !loadCart().length || Boolean(pendingMutation));
+        checkoutLink.setAttribute("aria-disabled", String(!loadCart().length || Boolean(pendingMutation)));
+    }
 
     function updateCartSummary(cart) {
         const unitCount = cart.reduce(function (total, item) {
@@ -334,11 +382,12 @@ function initialiseCartPage() {
         }
 
         updateCartSummary(cart);
+        updateMutationControls();
     }
 
     async function handleQuantityChange(event) {
         const input = event.target.closest("[data-cart-quantity]");
-        if (!input) {
+        if (!input || pendingMutation) {
             return;
         }
 
@@ -364,6 +413,12 @@ function initialiseCartPage() {
         input.removeAttribute("aria-invalid");
         input.classList.remove("is-invalid");
 
+        if (quantity === item.quantity) {
+            return;
+        }
+        pendingMutation = { id: item.id, kind: "quantity" };
+        updateMutationControls();
+        announce(feedback, "Updating quantity...");
         try {
             const data = await requestAPI("/api/cart/" + encodeURIComponent(item.id), {
                 method: "PUT",
@@ -372,32 +427,44 @@ function initialiseCartPage() {
             });
             saveCart(data.cart);
             announce(feedback, "Quantity updated.");
-            renderCart();
         } catch (error) {
             announce(feedback, error.message);
+        } finally {
+            pendingMutation = null;
             renderCart();
+            const replacement = document.getElementById(input.id);
+            if (replacement && document.activeElement === document.body) {
+                replacement.focus();
+            }
         }
     }
 
     itemsContainer.addEventListener("change", handleQuantityChange);
-    itemsContainer.addEventListener("focusout", handleQuantityChange);
 
     itemsContainer.addEventListener("click", async function (event) {
         const removeButton = event.target.closest("[data-remove-item]");
-        if (!removeButton) {
+        if (!removeButton || pendingMutation) {
             return;
         }
 
         const product = findProduct(removeButton.dataset.removeItem);
+        pendingMutation = { id: removeButton.dataset.removeItem, kind: "remove" };
+        updateMutationControls();
+        announce(feedback, "Removing textbook...");
         try {
             const data = await requestAPI("/api/cart/" + encodeURIComponent(removeButton.dataset.removeItem), {
                 method: "DELETE"
             });
             saveCart(data.cart);
             announce(feedback, product ? product.title + " was removed from your cart." : "Item removed.");
-            renderCart();
         } catch (error) {
             announce(feedback, error.message);
+        } finally {
+            pendingMutation = null;
+            renderCart();
+            if (document.activeElement === document.body) {
+                (itemsContainer.querySelector("[data-remove-item], a") || searchInput).focus();
+            }
         }
     });
 
@@ -407,9 +474,9 @@ function initialiseCartPage() {
         event.preventDefault();
     });
     checkoutLink.addEventListener("click", function (event) {
-        if (!loadCart().length) {
+        if (!loadCart().length || pendingMutation) {
             event.preventDefault();
-            announce(feedback, "Add at least one textbook before proceeding to checkout.");
+            announce(feedback, pendingMutation ? "Please wait for your cart to finish updating." : "Add at least one textbook before proceeding to checkout.");
         }
     });
 
@@ -452,6 +519,8 @@ function initialiseCheckoutPage() {
     const deliverySelect = document.querySelector("#delivery-method");
     const placeOrderButton = form.querySelector(".place-order-button");
     const feedback = document.querySelector("[data-checkout-feedback]");
+    let isSubmitting = false;
+    const placeOrderText = placeOrderButton.textContent;
 
     function showFieldError(field, message) {
         const error = document.querySelector("#" + field.id + "-error");
@@ -559,7 +628,7 @@ function initialiseCheckoutPage() {
 
     function updatePlaceOrderButton() {
         const cart = loadCart();
-        placeOrderButton.disabled = !cart.length || !checkForm(false);
+        placeOrderButton.disabled = isSubmitting || !cart.length || !checkForm(false);
     }
 
     function saveCheckoutDraft() {
@@ -615,7 +684,7 @@ function initialiseCheckoutPage() {
 
         document.querySelector("[data-checkout-subtotal]").textContent = formatVND(subtotal);
         document.querySelector("[data-checkout-delivery]").textContent = formatVND(deliveryFee);
-        document.querySelector("[data-checkout-total]").textContent = formatVND(subtotal + deliveryFee) + " VND";
+        document.querySelector("[data-checkout-total]").textContent = formatVND(subtotal + deliveryFee);
         updatePlaceOrderButton();
         updateCartCount();
     }
@@ -680,6 +749,10 @@ function initialiseCheckoutPage() {
     }
 
     form.addEventListener("submit", async function (event) {
+        event.preventDefault();
+        if (isSubmitting) {
+            return;
+        }
         const cart = loadCart();
         if (!cart.length) {
             event.preventDefault();
@@ -690,6 +763,7 @@ function initialiseCheckoutPage() {
         if (!checkForm(true)) {
             event.preventDefault();
             announce(feedback, "Please correct the highlighted checkout fields.");
+            form.querySelector('[aria-invalid="true"]').focus();
             return;
         }
 
@@ -718,6 +792,10 @@ function initialiseCheckoutPage() {
             }
         };
 
+        isSubmitting = true;
+        updatePlaceOrderButton();
+        placeOrderButton.textContent = "Processing Order...";
+        announce(feedback, "Processing your order...");
         try {
             const data = await requestAPI("/api/orders", {
                 method: "POST",
@@ -731,6 +809,9 @@ function initialiseCheckoutPage() {
             saveCart([]);
             window.location.href = "confirmation.html?orderId=" + encodeURIComponent(data.orderId);
         } catch (error) {
+            isSubmitting = false;
+            placeOrderButton.textContent = placeOrderText;
+            updatePlaceOrderButton();
             announce(feedback, error.message);
         }
     });
@@ -752,12 +833,7 @@ async function loadLastOrder() {
         return null;
     }
 
-    try {
-        return await requestAPI("/api/orders/" + encodeURIComponent(orderId));
-    } catch (error) {
-        console.warn("TextSwap could not load the order.", error);
-    }
-    return null;
+    return requestAPI("/api/orders/" + encodeURIComponent(orderId));
 }
 
 async function initialiseConfirmationPage() {
@@ -766,8 +842,21 @@ async function initialiseConfirmationPage() {
         return;
     }
 
-    const order = await loadLastOrder();
-    if (!order || !order.items.length) {
+    setText("[data-confirmation-heading]", "Loading order...");
+    setText("[data-confirmation-message]", "Retrieving your completed order...");
+    let order;
+    try {
+        order = await loadLastOrder();
+        if (!order) {
+            throw new Error("No order ID was found. Add a textbook and complete checkout first.");
+        }
+        if (!Array.isArray(order.items) || !order.items.length || !order.customer || !order.address ||
+            !Number.isFinite(new Date(order.orderedAt).getTime())) {
+            throw new Error("The server returned incomplete order details. Please refresh to try again.");
+        }
+    } catch (error) {
+        setText("[data-confirmation-heading]", "Order unavailable");
+        setText("[data-confirmation-message]", error.message);
         return;
     }
 
@@ -805,7 +894,7 @@ async function initialiseConfirmationPage() {
     setText("[data-confirmation-postcode]", "Postal code: " + order.address.postcode);
     setText("[data-confirmation-subtotal]", formatVND(order.subtotal));
     setText("[data-confirmation-delivery]", formatVND(order.deliveryFee));
-    setText("[data-confirmation-total]", formatVND(order.total) + " VND");
+    setText("[data-confirmation-total]", formatVND(order.total));
     setText("[data-confirmation-method]", deliveryMethodLabel(order.deliveryMethod));
 
     const emailLink = document.querySelector("[data-confirmation-email]");
@@ -823,11 +912,27 @@ async function initialiseCartModule() {
     localStorage.removeItem("textswap-last-order-v2");
     localStorage.removeItem("textswap-last-order-v3");
 
+    // Completed orders are independent of the current catalogue/cart.
+    if (document.querySelector("[data-confirmation-items]")) {
+        await initialiseConfirmationPage();
+        return;
+    }
+    const feedback = document.querySelector("[data-product-feedback], [data-cart-feedback], [data-checkout-feedback]");
+    announce(feedback, "Loading products and cart...");
+    const checkoutLink = document.querySelector("[data-checkout-link]");
+    if (checkoutLink) {
+        checkoutLink.setAttribute("aria-disabled", "true");
+        checkoutLink.addEventListener("click", function (event) {
+            if (checkoutLink.getAttribute("aria-disabled") === "true") {
+                event.preventDefault();
+            }
+        });
+    }
     try {
         await loadServerData();
     } catch (error) {
         const feedback = document.querySelector("[data-product-feedback], [data-cart-feedback], [data-checkout-feedback]");
-        announce(feedback, "Could not connect to the Shopping Cart server. Start NodeJS and refresh this page.");
+        announce(feedback, "Could not load products and cart. " + error.message + " Refresh this page to retry.");
         const productGrid = document.querySelector("[data-product-grid]");
         if (productGrid) {
             productGrid.innerHTML = "<p>Products could not be loaded from the server.</p>";
@@ -835,6 +940,7 @@ async function initialiseCartModule() {
         return;
     }
 
+    announce(feedback, "Products and cart loaded.");
     updateCartCount();
     initialiseProductPage();
     initialiseCartPage();
