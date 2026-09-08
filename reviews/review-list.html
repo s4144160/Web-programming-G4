@@ -34,52 +34,38 @@
         <section class="section">
             <div class="container">
                 <h1 class="text-center">Book & Seller Reviews</h1>
-                <p class="text-center text-muted mt-sm">See what other student think about text book and sellers.</p>
+                <p class="text-center text-muted mt-sm">See what other students think about textbooks and sellers.</p>
                 <div class="text-center mt-lg">
                     <a href="new-review.html" class="btn btn-primary">Write a Review</a>
                 </div>
-                <div class="card-grid mt-lg">
-                    <div class="card">
-                        <img src="../assets/images/The-music.webp" alt="This is the cover of a book titled "The Muse: Misunderstandings and Their Remedies. The background is a light gray gradient, giving it a soft, elegant, almost vintage feel.
-The title "THE MUSE" is in large, bold black serif capital letters near the top, with the subtitle "MISUNDERSTANDINGS AND THEIR REMEDIES" beneath it in smaller bold sans-serif caps.
-Ornate black filigree/scroll flourishes decorate each of the four corners, in a symmetrical, antique frame style.
-Small four-pointed star/sparkle accents are scattered near the left and right edges, adding a whimsical touch.
-The centerpiece is a large circular illustration with a thick black ring border. Inside, in a grayscale mandala-like design, is a woman's profile (facing right) intricately blended with swirling floral and paisley patterns — flowers, leaves, and decorative motifs surround and merge with her silhouette, giving it a dreamy, artistic, illustrative style reminiscent of an intricate coloring-book or Art Nouveau-inspired design.
-        ">
-                        <h3 class="card__title">The Muse: Misunderstandings and Their Remedies
-        </h3>
-                        <p class="card__meta">⭐⭐⭐⭐☆ · Eric Detweiler & Paul Evans & Amy Fant & Amy Harris-Aber & Kate Pantelides · 2022</p>
-                        <p>I really appreciate the text's emphasis on essays about writing, which makes the text personable and approachable.
-        </p>
-                        <a href="review-detail.html" class="btn btn-outline">Read More</a>
-                    </div>
 
-                    <div class="card">
-                        <img src="../assets/images/Psychiatric-Mental-Health-Nursing.webp" alt="This is the cover of an OpenStax textbook titled "Psychiatric-Mental Health Nursing. The background is a solid dark navy/teal blue.
-The title dominates the cover in oversized, bold sans-serif type stacked across multiple lines, running edge-to-edge (parts of the words are cropped by the frame, like "Psych-iatric" split across lines).
-The text uses two shades: "Psychiatric" and "Mental" and "Health" appear in a lighter sky-blue, while "Nursing" is in white, creating a visual contrast and emphasis on the last word.
-In the top right corner is the OpenStax logo — a small white icon resembling stacked book pages/lines, with the wordmark "openstax" in white and light blue (bold "stax").">
-                        <h3 class="card__title">Psychiatric-Mental Health Nursing</h3>
-                        <p class="card__meta">⭐⭐⭐⭐⭐ · Rebecca Puchkors · Baylor University & Jeanne Saunders, Daytona State College & David Sharp, Mississippi College, 2024</p>
-                        <p>This is a comprehensive open educational resource (OER) textbook that more than adequately covers the essential topics in Psychiatric Mental Health Nursing. It was a pleasure to review this text. I would recommend it as a primary text for undergraduate Mental Health Nursing courses</p>
-                        <a href="review-detail.html" class="btn btn-outline">Read More</a>
-                    </div>
+                <!-- Search / sort / filter controls (all handled client-side in review-list.js) -->
+                <div class="review-controls mt-lg">
+                    <input type="text" id="search-input" class="review-controls__search" placeholder="Search by book title or reviewer name...">
 
-                    <div class="card">
-                        <img src="../assets/images/Handbook-for Mindful-Technial- Writing.webp" alt="This is the cover of a book titled "Handbook for Mindful Technical Writing", subtitled "A Practical Guide for University Students and Professionals," written by Dawn Atkinson and Stacey Corbitt, 2026 Edition, published by Montana Technological University. The title is in a large, elegant black italic serif font at the top, centered on a white background.
-A small purple/violet vertical bar sits beside the subtitle text, which is in bold black uppercase letters.
-The bottom half of the cover features a stylized, geometric mountain landscape illustration made of flat, angular shapes in a muted palette — teal, blue, sage green, purple, and terracotta/orange tones — giving it a modern, minimalist look.
-The authors' names and edition year are printed in white uppercase text over the mountain illustration, marked with the same purple bar accent.
-At the very bottom, there's a black bar containing the Montana Technological University logo/wordmark in white and olive-green lettering.
-        ">
-                        <h3 class="card__title">Handbook for Mindful Technical Writing: A Practical Guide for University Students and Professionals - 2026 Edition</h3>
-                        <p class="card__meta">⭐⭐⭐☆☆ · Dawn Atkinson, Ph.D., Stacey Corbitt, M.S. · Copyright Year: 2026
-        </p>
-                        <p>This open textbook was compiled with the Americans with Disabilities Act in mind and in compliance with the Web Content Accessibility Guidelines 2.2 (WCAG 2.2). It is optimized for people who use screen-reader technology. All content can be navigated using a keyboard; all images have alt text tags; and information is not conveyed solely by color.
-        </p>
-                        <a href="review-detail.html" class="btn btn-outline">Read More</a>
-                    </div>
+                    <select id="sort-select" class="review-controls__select">
+                        <option value="newest">Newest first</option>
+                        <option value="oldest">Oldest first</option>
+                        <option value="rating-high">Rating: high to low</option>
+                        <option value="rating-low">Rating: low to high</option>
+                    </select>
+
+                    <select id="filter-select" class="review-controls__select">
+                        <option value="all">All ratings</option>
+                        <option value="5">5 stars only</option>
+                        <option value="4">4 stars & up</option>
+                        <option value="3">3 stars & up</option>
+                    </select>
                 </div>
+
+                <p id="results-count" class="text-muted mt-sm"></p>
+
+                <!-- Cards are rendered here dynamically by review-list.js -->
+                <div class="card-grid mt-lg" id="review-card-grid"></div>
+
+                <p id="no-results-message" class="text-center text-muted mt-lg" style="display:none;">
+                    No reviews match your search/filter.
+                </p>
             </div>
         </section>
     </main>
@@ -95,5 +81,6 @@ At the very bottom, there's a black bar containing the Montana Technological Uni
         </div>
     </footer>
 
+    <script src="review-list.js"></script>
 </body>
 </html>
