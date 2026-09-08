@@ -15,6 +15,7 @@ COSC3060 Web Programming Studio - Group Assignment (Web Programming G4)
 | Name | Contribution |
 |---|---|
 | David Huang | Shared `base.css` (site-wide styling) and homepage (`index.html`) |
+| Hai Nguyen Huu Nam | User Account System (register, login, profile, edit profile, password reset, session authentication) |
 
 ## Project Structure
 ```
