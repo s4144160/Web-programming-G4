@@ -2,6 +2,7 @@ const express = require("express");
 const path = require("path");
 require("dotenv").config();
 const mongoose = require("mongoose");
+const Review = require("./models/Review");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -415,85 +416,103 @@ app.get("/api/orders/:id", function (req, res) {
     res.json(order);
 });
 
-app.get("/api/reviews", function (req, res) {
-    res.json(reviews);
+app.get("/api/reviews", async function (req, res) {
+    try {
+        let reviews = await Review.find();
+        res.json(reviews);
+    } catch (err) {
+        res.status(500).json({ message: "Failed to fetch reviews." });
+    }
 });
 
-app.get("/api/reviews/:id", function (req, res) {
-    let review = findReview(Number(req.params.id));
+app.get("/api/reviews/:id", async function (req, res) {
+    try {
+        let review = await Review.findOne({ id: Number(req.params.id) });
 
-    if (!review) {
-        return res.status(404).json({ message: "Review not found." });
-    }
-    res.json(review);
-});
-
-app.post("/api/reviews", function (req, res) {
-    let errors = validateReviewData(req.body);
-    if (errors.length > 0) {
-        return res.status(400).json({ message: errors.join(" ") });
-    }
-
-    let currentUser = getCurrentReviewUser(req);
-    let newReview = {
-        id: nextReviewId,
-        bookTitle: req.body.bookTitle.trim(),
-        rating: Number(req.body.rating),
-        reviewerName: req.body.reviewerName.trim(),
-        content: req.body.content.trim(),
-        userId: currentUser.id,
-        createdAt: new Date().toISOString()
-    };
-    nextReviewId = nextReviewId + 1;
-
-    reviews.push(newReview);
-    res.status(201).json(newReview);
-});
-
-app.put("/api/reviews/:id", function (req, res) {
-    let review = findReview(Number(req.params.id));
-    if (!review) {
-        return res.status(404).json({ message: "Review not found." });
-    }
-
-    let currentUser = getCurrentReviewUser(req);
-    if (review.userId !== currentUser.id) {
-        return res.status(403).json({ message: "You can only edit your own reviews." });
-    }
-
-    let errors = validateReviewData(req.body);
-    if (errors.length > 0) {
-        return res.status(400).json({ message: errors.join(" ") });
-    }
-
-    review.bookTitle = req.body.bookTitle.trim();
-    review.rating = Number(req.body.rating);
-    review.reviewerName = req.body.reviewerName.trim();
-    review.content = req.body.content.trim();
-
-    res.json(review);
-});
-
-app.delete("/api/reviews/:id", function (req, res) {
-    let review = findReview(Number(req.params.id));
-    if (!review) {
-        return res.status(404).json({ message: "Review not found." });
-    }
-
-    let currentUser = getCurrentReviewUser(req);
-    if (review.userId !== currentUser.id) {
-        return res.status(403).json({ message: "You can only delete your own reviews." });
-    }
-
-    let index = -1;
-    for (let i = 0; i < reviews.length; i++) {
-        if (reviews[i].id === review.id) {
-            index = i;
+        if (!review) {
+            return res.status(404).json({ message: "Review not found." });
         }
+        res.json(review);
+    } catch (err) {
+        res.status(500).json({ message: "Failed to fetch review." });
     }
-    reviews.splice(index, 1);
+});
 
-    res.status(204).send();
+app.post("/api/reviews", async function (req, res) {
+    try {
+        let errors = validateReviewData(req.body);
+        if (errors.length > 0) {
+            return res.status(400).json({ message: errors.join(" ") });
+        }
+
+        let currentUser = getCurrentReviewUser(req);
+
+        let lastReview = await Review.findOne().sort({ id: -1 });
+        let nextId = lastReview ? lastReview.id + 1 : 1;
+
+        let newReview = new Review({
+            id: nextId,
+            bookTitle: req.body.bookTitle.trim(),
+            rating: Number(req.body.rating),
+            reviewerName: req.body.reviewerName.trim(),
+            content: req.body.content.trim(),
+            userId: currentUser.id,
+            createdAt: new Date()
+        });
+
+        await newReview.save();
+        res.status(201).json(newReview);
+    } catch (err) {
+        res.status(500).json({ message: "Failed to create review." });
+    }
+});
+
+app.put("/api/reviews/:id", async function (req, res) {
+    try {
+        let review = await Review.findOne({ id: Number(req.params.id) });
+        if (!review) {
+            return res.status(404).json({ message: "Review not found." });
+        }
+
+        let currentUser = getCurrentReviewUser(req);
+        if (review.userId !== currentUser.id) {
+            return res.status(403).json({ message: "You can only edit your own reviews." });
+        }
+
+        let errors = validateReviewData(req.body);
+        if (errors.length > 0) {
+            return res.status(400).json({ message: errors.join(" ") });
+        }
+
+        review.bookTitle = req.body.bookTitle.trim();
+        review.rating = Number(req.body.rating);
+        review.reviewerName = req.body.reviewerName.trim();
+        review.content = req.body.content.trim();
+
+        await review.save();
+        res.json(review);
+    } catch (err) {
+        res.status(500).json({ message: "Failed to update review." });
+    }
+});
+
+app.delete("/api/reviews/:id", async function (req, res) {
+    try {
+        let review = await Review.findOne({ id: Number(req.params.id) });
+        if (!review) {
+            return res.status(404).json({ message: "Review not found." });
+        }
+
+        let currentUser = getCurrentReviewUser(req);
+        if (review.userId !== currentUser.id) {
+            return res.status(403).json({ message: "You can only delete your own reviews." });
+        }
+
+        await Review.deleteOne({ id: review.id });
+        res.status(204).send();
+    } catch (err) {
+        res.status(500).json({ message: "Failed to delete review." });
+    }
 });
 
 app.use(express.static(path.join(__dirname)));
