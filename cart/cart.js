@@ -2,6 +2,7 @@
 
 let TEXTSWAP_PRODUCTS = [];
 let SERVER_CART = [];
+let CART_LOGIN_REQUIRED = false;
 
 const CART_STORAGE_KEY = "textswap-shopping-cart-v3";
 const ORDER_ID_STORAGE_KEY = "textswap-last-order-id-v1";
@@ -60,15 +61,32 @@ async function requestAPI(url, options) {
     }
 
     if (!response.ok) {
-        throw new Error((data && data.error) || "The server could not complete the request.");
+        const error = new Error((data && (data.error || data.message)) || "The server could not complete the request.");
+        error.status = response.status;
+        throw error;
     }
     return data;
 }
 
 async function loadServerData() {
     TEXTSWAP_PRODUCTS = await requestAPI("/api/products");
-    const cart = await requestAPI("/api/cart");
-    saveCart(cart);
+    try {
+        const cart = await requestAPI("/api/cart");
+        CART_LOGIN_REQUIRED = false;
+        saveCart(cart);
+    } catch (error) {
+        if (error.status === 401) {
+            CART_LOGIN_REQUIRED = true;
+            saveCart([]);
+            return;
+        }
+        throw error;
+    }
+}
+
+function goToLogin() {
+    sessionStorage.setItem("textswap-login-return", window.location.pathname + window.location.search);
+    window.location.href = "../account/login.html";
 }
 
 function formatVND(amount) {
@@ -221,6 +239,12 @@ function initialiseProductPage() {
             return;
         }
 
+        if (CART_LOGIN_REQUIRED) {
+            announce(feedback, "Please log in before adding a textbook to your cart.");
+            goToLogin();
+            return;
+        }
+
         pendingAdd = product.id;
         announce(feedback, "Adding " + product.title + " to your cart...");
         renderProducts();
@@ -364,7 +388,14 @@ function initialiseCartPage() {
             return firstItem.title.localeCompare(secondItem.title);
         });
 
-        if (!allItems.length) {
+        if (CART_LOGIN_REQUIRED) {
+            itemsContainer.innerHTML = `
+                <div class="cart-empty-state">
+                    <h3>Log in to view your cart</h3>
+                    <p>Your MongoDB cart is connected to your TextSwap account.</p>
+                    <a class="cart-action cart-action--primary" href="../account/login.html">Login</a>
+                </div>`;
+        } else if (!allItems.length) {
             itemsContainer.innerHTML = `
                 <div class="cart-empty-state">
                     <h3>Your cart is empty</h3>
@@ -476,7 +507,7 @@ function initialiseCartPage() {
     checkoutLink.addEventListener("click", function (event) {
         if (!loadCart().length || pendingMutation) {
             event.preventDefault();
-            announce(feedback, pendingMutation ? "Please wait for your cart to finish updating." : "Add at least one textbook before proceeding to checkout.");
+            announce(feedback, CART_LOGIN_REQUIRED ? "Please log in to use your cart." : pendingMutation ? "Please wait for your cart to finish updating." : "Add at least one textbook before proceeding to checkout.");
         }
     });
 
@@ -671,7 +702,9 @@ function initialiseCheckoutPage() {
         const subtotal = calculateSubtotal(cart);
         const deliveryFee = items.length ? deliveryFeeFor(deliverySelect.value) : 0;
 
-        if (items.length) {
+        if (CART_LOGIN_REQUIRED) {
+            itemsList.innerHTML = "<li>Please log in to view your saved cart and complete checkout.</li>";
+        } else if (items.length) {
             itemsList.innerHTML = items.map(function (item) {
                 return `<li>
                     <span>${escapeHTML(item.title)} <small>Quantity: ${item.quantity}</small></span>
@@ -855,6 +888,10 @@ async function initialiseConfirmationPage() {
             throw new Error("The server returned incomplete order details. Please refresh to try again.");
         }
     } catch (error) {
+        if (error.status === 401) {
+            goToLogin();
+            return;
+        }
         setText("[data-confirmation-heading]", "Order unavailable");
         setText("[data-confirmation-message]", error.message);
         return;
@@ -940,7 +977,7 @@ async function initialiseCartModule() {
         return;
     }
 
-    announce(feedback, "Products and cart loaded.");
+    announce(feedback, CART_LOGIN_REQUIRED ? "Products loaded. Log in to use your saved cart." : "Products and cart loaded.");
     updateCartCount();
     initialiseProductPage();
     initialiseCartPage();
