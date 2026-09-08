@@ -37,6 +37,10 @@ mongoose.connect(process.env.MONGODB_URI, { dbName: "textswap" })
                 console.log("✅ Admin account created");
             }
         }
+
+        app.listen(port, function () {
+            console.log("TextSwap running at http://localhost:" + port);
+        });
     })
     .catch((err) => console.error("❌ MongoDB connection error:", err.message));
 
@@ -136,6 +140,10 @@ app.post("/api/account/register", async function (req, res) {
     } catch (err) {
         if (err.code === 11000) {
             return res.status(409).json({ message: "That username or email is already registered." });
+        }
+        if (err.name === "ValidationError") {
+            let firstError = Object.values(err.errors)[0];
+            return res.status(400).json({ message: firstError.message });
         }
         res.status(500).json({ message: "Could not create the account." });
     }
@@ -881,7 +889,3 @@ app.delete("/api/reviews/:id", async function (req, res) {
 });
 
 app.use(express.static(path.join(__dirname)));
-
-app.listen(port, function () {
-    console.log("TextSwap running at http://localhost:" + port);
-});
