@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>(Your Module's name) - TextSwap</title>
+    <title>Login - TextSwap</title>
     <link rel="stylesheet" href="../assets/base.css">
+    <link rel="stylesheet" href="account.css">
 </head>
 <body>
 
@@ -27,10 +28,28 @@
             </div>
         </nav>
     </header>
-<main>
+<main class="account-page">
+    <div class="account-heading">
+        <h1>Log in to TextSwap</h1>
+        <p>Use your username or email address to access your account.</p>
+    </div>
 
-<!-- your page content goes here -->
-
+    <form id="login-form" class="form account-form" novalidate>
+        <div id="login-message" class="form-message" role="alert"></div>
+        <div class="form-group">
+            <label for="identifier">Username or email</label>
+            <input type="text" id="identifier" name="identifier" autocomplete="username" required>
+            <small class="field-error" data-error-for="identifier"></small>
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" autocomplete="current-password" required>
+            <small class="field-error" data-error-for="password"></small>
+        </div>
+        <button type="submit" class="btn btn-primary">Login</button>
+        <p class="account-note"><a href="reset-password.html">Forgot your password?</a></p>
+        <p class="account-note">New to TextSwap? <a href="register.html">Create an account</a></p>
+    </form>
 </main>
 <footer class="site-footer">
         <div class="container">
@@ -42,5 +61,7 @@
             </p>
         </div>
     </footer>
+    <script src="../assets/auth-nav.js"></script>
+    <script src="account.js"></script>
 </body>
 </html>

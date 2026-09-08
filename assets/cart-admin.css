@@ -1199,6 +1199,12 @@
     background: #fdeaea;
 }
 
+.status-badge--deactivated {
+    color: #555;
+    background-color: #eeeeee;
+    border-color: #999;
+}
+
 .account-action {
     white-space: nowrap;
     background: var(--color-surface);
