@@ -811,14 +811,12 @@ app.get("/api/reviews/:id", async function (req, res) {
     }
 });
 
-app.post("/api/reviews", async function (req, res) {
+app.post("/api/reviews", auth.requireLogin, async function (req, res) {
     try {
         let errors = validateReviewData(req.body);
         if (errors.length > 0) {
             return res.status(400).json({ message: errors.join(" ") });
         }
-
-        let currentUser = getCurrentReviewUser(req);
 
         let lastReview = await Review.findOne().sort({ id: -1 });
         let nextId = lastReview ? lastReview.id + 1 : 1;
@@ -829,7 +827,7 @@ app.post("/api/reviews", async function (req, res) {
             rating: Number(req.body.rating),
             reviewerName: req.body.reviewerName.trim(),
             content: req.body.content.trim(),
-            userId: currentUser.id,
+            userId: req.user._id.toString(),
             createdAt: new Date()
         });
 
@@ -840,15 +838,14 @@ app.post("/api/reviews", async function (req, res) {
     }
 });
 
-app.put("/api/reviews/:id", async function (req, res) {
+app.put("/api/reviews/:id", auth.requireLogin, async function (req, res) {
     try {
         let review = await Review.findOne({ id: Number(req.params.id) });
         if (!review) {
             return res.status(404).json({ message: "Review not found." });
         }
 
-        let currentUser = getCurrentReviewUser(req);
-        if (review.userId !== currentUser.id) {
+        if (review.userId !== req.user._id.toString()) {
             return res.status(403).json({ message: "You can only edit your own reviews." });
         }
 
@@ -869,15 +866,14 @@ app.put("/api/reviews/:id", async function (req, res) {
     }
 });
 
-app.delete("/api/reviews/:id", async function (req, res) {
+app.delete("/api/reviews/:id", auth.requireLogin, async function (req, res) {
     try {
         let review = await Review.findOne({ id: Number(req.params.id) });
         if (!review) {
             return res.status(404).json({ message: "Review not found." });
         }
 
-        let currentUser = getCurrentReviewUser(req);
-        if (review.userId !== currentUser.id) {
+        if (review.userId !== req.user._id.toString()) {
             return res.status(403).json({ message: "You can only delete your own reviews." });
         }
 

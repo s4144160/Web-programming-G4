@@ -1,10 +1,24 @@
-const CURRENT_USER_ID = 101;
-
 const detailCard = document.querySelector("#review-detail-card");
+
+let currentUserId = null;
 
 function getReviewIdFromUrl() {
     const params = new URLSearchParams(window.location.search);
     return params.get("id");
+}
+
+async function loadCurrentUser() {
+    try {
+        const response = await fetch("/api/account/me");
+        if (!response.ok) {
+            currentUserId = null;
+            return;
+        }
+        const data = await response.json();
+        currentUserId = data.user.id;
+    } catch (error) {
+        currentUserId = null;
+    }
 }
 
 async function loadReviewDetail() {
@@ -14,6 +28,8 @@ async function loadReviewDetail() {
         detailCard.innerHTML = "<p>No review selected.</p><a href='review-list.html' class='btn btn-outline mt-lg'>&larr; Back to Reviews</a>";
         return;
     }
+
+    await loadCurrentUser();
 
     try{
         const response = await fetch(`/api/reviews/${reviewId}`);
@@ -33,7 +49,7 @@ async function loadReviewDetail() {
 
 function renderReview(review){
     const stars = "⭐".repeat(review.rating) + "☆".repeat(5 - review.rating);
-    const isOwner = review.userId === CURRENT_USER_ID;
+    const isOwner = currentUserId !== null && String(review.userId) === String(currentUserId);
     const submittedDate = new Date(review.createdAt).toLocaleDateString();
 
     detailCard.innerHTML = `
@@ -60,7 +76,7 @@ async function handleDelete(reviewId){
     if(!confirmed) return;
 
     try{
-        const response = await fetch(`/api/reviews/${reviewId}?userId=${CURRENT_USER_ID}`, {
+        const response = await fetch(`/api/reviews/${reviewId}`, {
             method: "DELETE"
         });
 
