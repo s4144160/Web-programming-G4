@@ -24,8 +24,14 @@ project-repo/
 ├── sitemap.html
 ├── server.js
 ├── package.json
+├── models/
+│ ├── User.js
+│ └── Review.js
+├── middleware/
+│ └── auth.js
 ├── assets/
 │ ├── base.css
+│ ├── auth-nav.js
 │ └── images/
 ├── account/
 ├── admin/
@@ -35,18 +41,39 @@ project-repo/
 ├── reviews/
 ```
 
-## How to Run (A2 Prototype)
+## Setup and run
 
-1. In the project root: `npm install`
-2. Then: `npm start`
-3. Open `http://localhost:3000` in the browser (not Live Server / port 5500 —
+1. Copy `.env.example` to `.env`.
+2. Add the MongoDB Atlas connection string and account settings shown below.
+3. In the project root run `npm install`.
+4. Run `npm start`.
+5. Open `http://localhost:3000` in the browser (not Live Server / port 5500 —
    the dynamic pages depend on the `/api/...` routes served by this Node server).
-4. Each module's pages are under its own folder (e.g. `/cart`, `/reviews`, `/forum`).
+6. Each module's pages are under its own folder (e.g. `/cart`, `/reviews`, `/forum`).
    See each folder for module-specific testing notes if needed.
 
-## Notes
-- Module assignments for A and C are still being confirmed in group chat; this README will be updated once finalized.
-- The shared User Account/login module is still in progress — until it's ready,
-  individual modules that need "the currently logged-in user" are using a
-  placeholder user id internally. Update this once the login system is merged in.
-- Data for all modules is in-memory only for this A2 prototype (no MongoDB yet), per the assignment spec.
+## Environment variables
+
+```text
+MONGODB_URI=your MongoDB Atlas connection string
+SESSION_SECRET=a long random value
+ADMIN_USERNAME=the initial administrator username
+ADMIN_EMAIL=the initial administrator email
+ADMIN_PASSWORD=the initial administrator password
+PORT=3000
+```
+
+The server always selects the `textswap` database. The administrator is created only when all three `ADMIN_...` values exist and no user already has that username or email. Keep `.env` private and do not commit it.
+
+## User Account module
+
+- Register: `/account/register.html`
+- Login: `/account/login.html`
+- Profile: `/account/profile.html`
+- Edit profile and password: `/account/edit-profile.html`
+- Prototype password reset: `/account/reset-password.html`
+- User administration: `/admin/user-management.html`
+
+Authentication uses `express-session`. The session currently uses Express's in-memory session store, which is suitable for this course prototype but should be replaced before production deployment. User records persist in MongoDB Atlas and passwords are stored only as bcrypt hashes.
+
+After login, the current MongoDB user id is available to future protected routes as `req.session.userId`. Shopping Cart data is still using its current implementation and has not been changed to user-specific MongoDB storage in this branch.

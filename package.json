@@ -1,14 +1,16 @@
 {
-  "name": "textswap-shopping-cart",
+  "name": "textswap",
   "version": "1.0.0",
-  "description": "COSC3060 TextSwap Shopping Cart prototype",
+  "description": "COSC3060 TextSwap website",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
   "dependencies": {
+    "bcryptjs": "^3.0.3",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "express-session": "^1.19.0",
     "lodash": "^4.18.1",
     "mongoose": "^9.9.5"
   }

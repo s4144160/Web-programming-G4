@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>(Your Module's name) - TextSwap</title>
+    <title>Create Account - TextSwap</title>
     <link rel="stylesheet" href="../assets/base.css">
+    <link rel="stylesheet" href="account.css">
 </head>
 <body>
 
@@ -27,10 +28,47 @@
             </div>
         </nav>
     </header>
-<main>
+<main class="account-page">
+    <div class="account-heading">
+        <h1>Create your TextSwap account</h1>
+        <p>Register to manage your profile and take part in the TextSwap community.</p>
+    </div>
 
-<!-- your page content goes here -->
-
+    <form id="register-form" class="form account-form" novalidate>
+        <div id="register-message" class="form-message" role="alert"></div>
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" autocomplete="username" maxlength="30" required>
+            <small class="field-error" data-error-for="username"></small>
+        </div>
+        <div class="form-group">
+            <label for="name">Full name</label>
+            <input type="text" id="name" name="name" autocomplete="name" maxlength="80" required>
+            <small class="field-error" data-error-for="name"></small>
+        </div>
+        <div class="form-group">
+            <label for="email">Email address</label>
+            <input type="email" id="email" name="email" autocomplete="email" required>
+            <small class="field-error" data-error-for="email"></small>
+        </div>
+        <div class="form-group">
+            <label for="description">Profile description (optional)</label>
+            <textarea id="description" name="description" maxlength="300"></textarea>
+            <small class="field-error" data-error-for="description"></small>
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" autocomplete="new-password" minlength="6" required>
+            <small class="field-error" data-error-for="password"></small>
+        </div>
+        <div class="form-group">
+            <label for="confirm-password">Confirm password</label>
+            <input type="password" id="confirm-password" name="confirmPassword" autocomplete="new-password" minlength="6" required>
+            <small class="field-error" data-error-for="confirmPassword"></small>
+        </div>
+        <button type="submit" class="btn btn-primary">Create Account</button>
+        <p class="account-note">Already registered? <a href="login.html">Log in</a></p>
+    </form>
 </main>
 <footer class="site-footer">
         <div class="container">
@@ -42,5 +80,7 @@
             </p>
         </div>
     </footer>
+    <script src="../assets/auth-nav.js"></script>
+    <script src="account.js"></script>
 </body>
 </html>
