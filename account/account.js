@@ -137,7 +137,11 @@ document.addEventListener("DOMContentLoaded", function () {
                     message(document.getElementById("login-message"), result.data.message, true);
                     return;
                 }
-                if (result.data.user.role === "admin") {
+                let returnUrl = sessionStorage.getItem("textswap-login-return");
+                sessionStorage.removeItem("textswap-login-return");
+                if (returnUrl && returnUrl.indexOf("/cart/") === 0) {
+                    window.location.href = returnUrl;
+                } else if (result.data.user.role === "admin") {
                     window.location.href = "../admin/user-management.html";
                 } else {
                     window.location.href = "profile.html";
@@ -301,6 +305,8 @@ document.addEventListener("DOMContentLoaded", function () {
     for (let i = 0; i < logoutButtons.length; i++) {
         logoutButtons[i].addEventListener("click", async function () {
             await send("/api/account/logout", "POST");
+            localStorage.removeItem("textswap-shopping-cart-v3");
+            localStorage.removeItem("textswap-last-order-id-v1");
             goToLogin();
         });
     }
@@ -314,6 +320,8 @@ document.addEventListener("DOMContentLoaded", function () {
             }
             let result = await send("/api/account/deactivate", "POST");
             if (result.ok) {
+                localStorage.removeItem("textswap-shopping-cart-v3");
+                localStorage.removeItem("textswap-last-order-id-v1");
                 goToLogin();
             } else {
                 message(document.getElementById("profile-message"), result.data.message, true);

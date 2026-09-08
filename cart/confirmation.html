@@ -36,7 +36,7 @@
             <div class="confirmation-hero__icon" data-confirmation-icon aria-hidden="true">!</div>
             <p class="module-heading__eyebrow" data-confirmation-eyebrow>Order status</p>
             <h1 id="confirmation-heading" data-confirmation-heading>No Completed Order</h1>
-            <p data-confirmation-message>No completed order was found. Add a textbook and complete checkout first.</p>
+            <p data-confirmation-message role="status" aria-live="polite">No completed order was found. Add a textbook and complete checkout first.</p>
             <div class="confirmation-meta" data-confirmation-meta hidden>
                 <p><span>Order number</span><strong data-confirmation-number></strong></p>
                 <p><span>Order date</span><strong data-confirmation-date></strong></p>
@@ -100,7 +100,7 @@
             </section>
         </div>
 
-        <p class="prototype-note"><strong>Prototype note:</strong> This is a simulated order for the static TextSwap prototype. No payment was processed and no textbooks will be delivered.</p>
+        <p class="prototype-note"><strong>Payment notice:</strong> This checkout is a simulation for TextSwap. No real payment is taken and payment details are not stored.</p>
         </div>
 
         <nav class="confirmation-actions" aria-label="Order confirmation actions">

@@ -33,6 +33,8 @@ document.addEventListener("DOMContentLoaded", async function () {
         logout.textContent = "Logout";
         logout.addEventListener("click", async function () {
             await fetch("/api/account/logout", { method: "POST" });
+            localStorage.removeItem("textswap-shopping-cart-v3");
+            localStorage.removeItem("textswap-last-order-id-v1");
             window.location.href = "/account/login.html";
         });
         actions.appendChild(logout);

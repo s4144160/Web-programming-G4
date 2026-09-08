@@ -1557,3 +1557,10 @@
         min-height: 220px;
     }
 }
+
+/* Cart request and keyboard states. */
+.product-add-button { font-family: inherit; cursor: pointer; }
+.product-add-button:disabled,
+.remove-button:disabled,
+.quantity-control input:disabled { opacity: 0.65; cursor: wait; }
+.product-add-button:focus-visible { outline: 3px solid var(--color-primary-dark); outline-offset: 3px; }
