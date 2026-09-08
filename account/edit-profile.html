@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>(Your Module's name) - TextSwap</title>
+    <title>Edit Profile - TextSwap</title>
     <link rel="stylesheet" href="../assets/base.css">
+    <link rel="stylesheet" href="account.css">
 </head>
 <body>
 
@@ -27,10 +28,58 @@
             </div>
         </nav>
     </header>
-<main>
+<main class="account-page">
+    <div class="account-heading">
+        <h1>Edit Profile</h1>
+        <p>Update your public account details or change your password.</p>
+    </div>
 
-<!-- your page content goes here -->
+    <div class="account-grid">
+        <form id="profile-form" class="form" novalidate>
+            <h2>Profile details</h2>
+            <div id="profile-form-message" class="form-message" role="alert"></div>
+            <div class="form-group">
+                <label for="name">Full name</label>
+                <input type="text" id="name" name="name" autocomplete="name" maxlength="80" required>
+                <small class="field-error" data-error-for="name"></small>
+            </div>
+            <div class="form-group">
+                <label for="email">Email address</label>
+                <input type="email" id="email" name="email" autocomplete="email" required>
+                <small class="field-error" data-error-for="email"></small>
+            </div>
+            <div class="form-group">
+                <label for="description">Profile description</label>
+                <textarea id="description" name="description" maxlength="300"></textarea>
+                <small class="field-error" data-error-for="description"></small>
+            </div>
+            <div class="form-group">
+                <label for="profile-image">Profile image URL</label>
+                <input type="url" id="profile-image" name="profileImage" placeholder="https://example.com/photo.jpg">
+                <small class="field-error" data-error-for="profileImage"></small>
+            </div>
+            <button type="submit" class="btn btn-primary">Save Profile</button>
+            <a href="profile.html" class="account-link">Return to profile</a>
+        </form>
 
+        <form id="password-form" class="form" novalidate>
+            <h2>Change password</h2>
+            <div id="password-message" class="form-message" role="alert"></div>
+            <div class="form-group">
+                <label for="current-password">Current password</label>
+                <input type="password" id="current-password" name="currentPassword" autocomplete="current-password" required>
+            </div>
+            <div class="form-group">
+                <label for="new-password">New password</label>
+                <input type="password" id="new-password" name="newPassword" autocomplete="new-password" minlength="6" required>
+            </div>
+            <div class="form-group">
+                <label for="confirm-password">Confirm new password</label>
+                <input type="password" id="confirm-password" name="confirmPassword" autocomplete="new-password" minlength="6" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Change Password</button>
+        </form>
+    </div>
 </main>
 <footer class="site-footer">
         <div class="container">
@@ -42,5 +91,7 @@
             </p>
         </div>
     </footer>
+    <script src="../assets/auth-nav.js"></script>
+    <script src="account.js"></script>
 </body>
 </html>
