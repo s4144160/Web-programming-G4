@@ -62,7 +62,21 @@ ADMIN_USERNAME=the initial administrator username
 ADMIN_EMAIL=the initial administrator email
 ADMIN_PASSWORD=the initial administrator password
 PORT=3000
+
 ```
+
+## Test Credentials
+
+For marking purposes, the following accounts can be used to log in and test the application:
+
+**Test user account**
+- Username: `David`
+- Password: `20050122`
+
+**Administrator account**
+- Username: `admin`
+- Email: `admin@textswap.com`
+- Password: `Admin123456`
 
 The server always selects the `textswap` database. The administrator is created only when all three `ADMIN_...` values exist and no user already has that username or email. Keep `.env` private and do not commit it.
 
