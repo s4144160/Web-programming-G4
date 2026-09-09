@@ -3,10 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>(Your Module's name) - TextSwap</title>
+    <title>Administration - TextSwap</title>
     <link rel="stylesheet" href="../assets/base.css">
+    <link rel="stylesheet" href="../assets/cart-admin.css">
+    <link rel="stylesheet" href="admin.css">
 </head>
-<body>
+<body data-admin-page="dashboard">
 
     <header class="site-header">
         <nav class="navbar">
@@ -28,9 +30,48 @@
         </nav>
     </header>
 <main>
+    <div class="container admin-page">
+        <div id="dashboard-access-message" class="admin-access-message" role="status" aria-live="polite">Checking administrator access...</div>
 
-<!-- your page content goes here -->
+        <div id="dashboard-content" hidden>
+            <header class="module-heading">
+                <p class="module-heading__eyebrow">Administration workspace</p>
+                <h1>TextSwap Administration</h1>
+                <p>Manage registered user access for the TextSwap website.</p>
+            </header>
 
+            <section aria-labelledby="dashboard-summary-heading">
+                <h2 id="dashboard-summary-heading" class="cart-admin-visually-hidden">Account summary</h2>
+                <div class="admin-summary-grid admin-summary-grid--dashboard">
+                    <article class="admin-summary-card">
+                        <p>Total users</p>
+                        <strong id="dashboard-total-users">0</strong>
+                        <span>All registered accounts</span>
+                    </article>
+                    <article class="admin-summary-card admin-summary-card--active">
+                        <p>Active users</p>
+                        <strong id="dashboard-active-users">0</strong>
+                        <span>Accounts able to log in</span>
+                    </article>
+                    <article class="admin-summary-card admin-summary-card--locked">
+                        <p>Locked users</p>
+                        <strong id="dashboard-locked-users">0</strong>
+                        <span>Accounts currently restricted</span>
+                    </article>
+                </div>
+            </section>
+
+            <section class="admin-dashboard-card" aria-labelledby="manage-users-heading">
+                <h2 id="manage-users-heading">User account management</h2>
+                <p>View registered accounts and lock or unlock access when required.</p>
+                <div class="admin-dashboard-actions">
+                    <a href="user-management.html" class="btn btn-primary">Open User Management</a>
+                    <a href="../index.html" class="btn btn-outline">Return to Website</a>
+                    <button type="button" class="btn btn-outline" id="admin-logout">Logout</button>
+                </div>
+            </section>
+        </div>
+    </div>
 </main>
 <footer class="site-footer">
         <div class="container">
@@ -42,5 +83,7 @@
             </p>
         </div>
     </footer>
+    <script src="../assets/auth-nav.js"></script>
+    <script src="admin-dashboard.js"></script>
 </body>
 </html>
