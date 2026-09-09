@@ -41,7 +41,6 @@ mongoose.connect(process.env.MONGODB_URI, { dbName: "textswap" })
             }
         }
 
-        await seedProducts();
         app.listen(port, function () {
             console.log("TextSwap running at http://localhost:" + port);
         });
@@ -389,7 +388,7 @@ app.put("/api/admin/users/:id/status", auth.requireAdmin, async function (req, r
     }
 });
 
-let productSeeds = [
+let products = [
     {
         id: "corporate-finance-14",
         title: "Principles of Corporate Finance, 14th Edition",
@@ -472,6 +471,9 @@ let productSeeds = [
     }
 ];
 
+let cart = [];
+let orders = [];
+
 
 let reviews = [
     {
@@ -513,66 +515,25 @@ let reviews = [
 ];
 let nextReviewId = 5;
 
-async function seedProducts() {
-    for (let i = 0; i < productSeeds.length; i++) {
-        let data = Object.assign({}, productSeeds[i]);
-        data.productId = data.id;
-        delete data.id;
-        await Product.updateOne(
-            { productId: data.productId },
-            { $setOnInsert: data },
-            { upsert: true }
-        );
-    }
-}
+function findProduct(id) {
+    let found = null;
 
-function productData(product) {
-    return {
-        id: product.productId,
-        title: product.title,
-        shortTitle: product.shortTitle,
-        author: product.author,
-        authorDisplay: product.authorDisplay,
-        edition: product.edition,
-        detailLabel: product.detailLabel,
-        detail: product.detail,
-        subject: product.subject,
-        course: product.course,
-        condition: product.condition,
-        conditionValue: product.conditionValue,
-        seller: product.seller,
-        sellerCode: product.sellerCode,
-        pickup: product.pickup,
-        price: product.price,
-        image: product.image,
-        imageAlt: product.imageAlt
-    };
-}
-
-async function getCartData(userId) {
-    let result = [];
-    let cart = await Cart.findOne({ userId: userId });
-
-    if (!cart || !cart.items.length) {
-        return result;
-    }
-
-    let ids = [];
-    for (let i = 0; i < cart.items.length; i++) {
-        ids.push(cart.items[i].productId);
-    }
-    let products = await Product.find({ productId: { $in: ids } });
-
-    for (let i = 0; i < cart.items.length; i++) {
-        let product = null;
-        for (let j = 0; j < products.length; j++) {
-            if (products[j].productId === cart.items[i].productId) {
-                product = products[j];
-            }
+    for (let i = 0; i < products.length; i++) {
+        if (products[i].id === id) {
+            found = products[i];
         }
+    }
+    return found;
+}
+
+function getCartData() {
+    let result = [];
+
+    for (let i = 0; i < cart.length; i++) {
+        let product = findProduct(cart[i].productId);
         if (product) {
             result.push({
-                id: product.productId,
+                id: product.id,
                 title: product.title,
                 author: product.author,
                 edition: product.edition,
@@ -583,7 +544,7 @@ async function getCartData(userId) {
                 price: product.price,
                 image: product.image,
                 imageAlt: product.imageAlt,
-                quantity: cart.items[i].quantity
+                quantity: cart[i].quantity
             });
         }
     }
@@ -612,11 +573,6 @@ function findReview(id) {
     return found;
 }
 
-function getCurrentReviewUser(req) {
-    let userId = req.query.userId || (req.body && req.body.userId) || 101;
-    return { id: Number(userId) };
-}
-
 function validateReviewData(data) {
     let errors = [];
 
@@ -640,130 +596,89 @@ function validateReviewData(data) {
     return errors;
 }
 
-app.get("/api/products", async function (req, res) {
-    try {
-        let products = await Product.find({}).sort({ createdAt: 1 });
-        let result = [];
-        for (let i = 0; i < products.length; i++) {
-            result.push(productData(products[i]));
-        }
-        res.json(result);
-    } catch (err) {
-        res.status(500).json({ error: "Products could not be loaded." });
-    }
+app.get("/api/products", function (req, res) {
+    res.json(products);
 });
 
-app.get("/api/cart", auth.requireLogin, async function (req, res) {
-    try {
-        res.json(await getCartData(req.user._id));
-    } catch (err) {
-        res.status(500).json({ error: "The cart could not be loaded." });
-    }
+app.get("/api/cart", function (req, res) {
+    res.json(getCartData());
 });
 
-app.post("/api/cart", auth.requireLogin, async function (req, res) {
+app.post("/api/cart", function (req, res) {
     let productId = req.body.productId;
     let qty = req.body.quantity;
+    let product = findProduct(productId);
 
     if (typeof productId !== "string" || !productId.trim()) {
         return res.status(400).json({ error: "A valid product ID is required." });
     }
+    if (!product) {
+        return res.status(404).json({ error: "Product was not found." });
+    }
     if (typeof qty !== "number" || !Number.isInteger(qty) || qty < 1 || qty > 99) {
         return res.status(400).json({ error: "Quantity must be a whole number from 1 to 99." });
     }
 
-    try {
-        let product = await Product.findOne({ productId: productId });
-        if (!product) {
-            return res.status(404).json({ error: "Product was not found." });
+    let found = null;
+    for (let i = 0; i < cart.length; i++) {
+        if (cart[i].productId === productId) {
+            found = cart[i];
         }
-
-        let cart = await Cart.findOne({ userId: req.user._id });
-        if (!cart) {
-            cart = new Cart({ userId: req.user._id, items: [] });
-        }
-
-        let found = null;
-        for (let i = 0; i < cart.items.length; i++) {
-            if (cart.items[i].productId === productId) {
-                found = cart.items[i];
-            }
-        }
-
-        if (found) {
-            if (found.quantity + qty > 99) {
-                return res.status(400).json({ error: "The maximum quantity is 99." });
-            }
-            found.quantity = found.quantity + qty;
-        } else {
-            cart.items.push({ productId: productId, quantity: qty });
-        }
-
-        await cart.save();
-        res.status(201).json({ message: "Product added to cart.", cart: await getCartData(req.user._id) });
-    } catch (err) {
-        res.status(500).json({ error: "The product could not be added to the cart." });
     }
+
+    if (found) {
+        if (found.quantity + qty > 99) {
+            return res.status(400).json({ error: "The maximum quantity is 99." });
+        }
+        found.quantity = found.quantity + qty;
+    } else {
+        cart.push({ productId: productId, quantity: qty });
+    }
+
+    res.status(201).json({ message: "Product added to cart.", cart: getCartData() });
 });
 
-app.put("/api/cart/:id", auth.requireLogin, async function (req, res) {
+app.put("/api/cart/:id", function (req, res) {
     let productId = req.params.id;
     let qty = req.body.quantity;
+    let found = null;
 
+    for (let i = 0; i < cart.length; i++) {
+        if (cart[i].productId === productId) {
+            found = cart[i];
+        }
+    }
+
+    if (!findProduct(productId) || !found) {
+        return res.status(404).json({ error: "Cart item was not found." });
+    }
     if (typeof qty !== "number" || !Number.isInteger(qty) || qty < 1 || qty > 99) {
         return res.status(400).json({ error: "Quantity must be a whole number from 1 to 99." });
     }
 
-    try {
-        let cart = await Cart.findOne({ userId: req.user._id });
-        let found = null;
-        if (cart) {
-            for (let i = 0; i < cart.items.length; i++) {
-                if (cart.items[i].productId === productId) {
-                    found = cart.items[i];
-                }
-            }
-        }
-
-        if (!found) {
-            return res.status(404).json({ error: "Cart item was not found." });
-        }
-
-        found.quantity = qty;
-        await cart.save();
-        res.json({ message: "Cart quantity updated.", cart: await getCartData(req.user._id) });
-    } catch (err) {
-        res.status(500).json({ error: "The cart quantity could not be updated." });
-    }
+    found.quantity = qty;
+    res.json({ message: "Cart quantity updated.", cart: getCartData() });
 });
 
-app.delete("/api/cart/:id", auth.requireLogin, async function (req, res) {
+app.delete("/api/cart/:id", function (req, res) {
     let productId = req.params.id;
+    let index = -1;
 
-    try {
-        let cart = await Cart.findOne({ userId: req.user._id });
-        let index = -1;
-        if (cart) {
-            for (let i = 0; i < cart.items.length; i++) {
-                if (cart.items[i].productId === productId) {
-                    index = i;
-                }
-            }
+    for (let i = 0; i < cart.length; i++) {
+        if (cart[i].productId === productId) {
+            index = i;
         }
-
-        if (index === -1) {
-            return res.status(404).json({ error: "Cart item was not found." });
-        }
-
-        cart.items.splice(index, 1);
-        await cart.save();
-        res.json({ message: "Product removed from cart.", cart: await getCartData(req.user._id) });
-    } catch (err) {
-        res.status(500).json({ error: "The product could not be removed from the cart." });
     }
+
+    if (index === -1) {
+        return res.status(404).json({ error: "Cart item was not found." });
+    }
+
+    cart.splice(index, 1);
+    res.json({ message: "Product removed from cart.", cart: getCartData() });
 });
 
-app.post("/api/orders", auth.requireLogin, async function (req, res) {
+app.post("/api/orders", function (req, res) {
     let data = req.body || {};
     let customer = data.customer || {};
     let address = data.address || {};
@@ -820,92 +735,56 @@ app.post("/api/orders", auth.requireLogin, async function (req, res) {
     if (data.confirmed !== true) {
         return res.status(400).json({ error: "The order confirmation checkbox is required." });
     }
-    try {
-        let cart = await Cart.findOne({ userId: req.user._id });
-        if (!cart || !cart.items.length) {
-            return res.status(400).json({ error: "The cart is empty." });
-        }
-
-        let items = await getCartData(req.user._id);
-        if (!items.length) {
-            return res.status(400).json({ error: "The cart is empty." });
-        }
-
-        let subtotal = 0;
-        let orderItems = [];
-        for (let i = 0; i < items.length; i++) {
-            subtotal = subtotal + (items[i].price * items[i].quantity);
-            orderItems.push({
-                productId: items[i].id,
-                title: items[i].title,
-                author: items[i].author,
-                edition: items[i].edition,
-                detailLabel: items[i].detailLabel,
-                detail: items[i].detail,
-                condition: items[i].condition,
-                seller: items[i].seller,
-                price: items[i].price,
-                image: items[i].image,
-                imageAlt: items[i].imageAlt,
-                quantity: items[i].quantity
-            });
-        }
-
-        let fee = deliveryFee(method);
-        let order = await Order.create({
-            orderId: "TS-" + Date.now() + "-" + Math.floor(100 + Math.random() * 900),
-            userId: req.user._id,
-            items: orderItems,
-            orderedAt: new Date(),
-            subtotal: subtotal,
-            deliveryFee: fee,
-            total: subtotal + fee,
-            deliveryMethod: method,
-            customer: {
-                name: customer.name.trim(),
-                email: customer.email.trim(),
-                phone: customer.phone
-            },
-            address: {
-                street: address.street.trim(),
-                district: address.district.trim(),
-                city: address.city.trim(),
-                postcode: address.postcode
-            }
-        });
-
-        cart.items = [];
-        await cart.save();
-        res.status(201).json({ message: "Order created.", orderId: order.orderId });
-    } catch (err) {
-        if (err.code === 11000) {
-            return res.status(409).json({ error: "An order number conflict occurred. Please try again." });
-        }
-        res.status(500).json({ error: "The order could not be created." });
+    if (!cart.length) {
+        return res.status(400).json({ error: "The cart is empty." });
     }
+
+    let items = getCartData();
+    let subtotal = 0;
+    for (let i = 0; i < items.length; i++) {
+        subtotal = subtotal + (items[i].price * items[i].quantity);
+    }
+
+    let fee = deliveryFee(method);
+    let order = {
+        id: "TS-" + String(100001 + orders.length),
+        items: items,
+        orderedAt: new Date().toISOString(),
+        subtotal: subtotal,
+        deliveryFee: fee,
+        total: subtotal + fee,
+        deliveryMethod: method,
+        customer: {
+            name: customer.name.trim(),
+            email: customer.email.trim(),
+            phone: customer.phone
+        },
+        address: {
+            street: address.street.trim(),
+            district: address.district.trim(),
+            city: address.city.trim(),
+            postcode: address.postcode
+        }
+    };
+
+    orders.push(order);
+    cart = [];
+    res.status(201).json({ message: "Order created.", orderId: order.id });
 });
 
-app.get("/api/orders/:id", auth.requireLogin, async function (req, res) {
-    try {
-        let order = await Order.findOne({ orderId: req.params.id, userId: req.user._id });
-        if (!order) {
-            return res.status(404).json({ error: "Order was not found." });
-        }
+app.get("/api/orders/:id", function (req, res) {
+    let order = null;
 
-        res.json({
-            id: order.orderId,
-            items: order.items,
-            orderedAt: order.orderedAt,
-            subtotal: order.subtotal,
-            deliveryFee: order.deliveryFee,
-            total: order.total,
-            deliveryMethod: order.deliveryMethod,
-            customer: order.customer,
-            address: order.address
-        });
-    } catch (err) {
-        res.status(500).json({ error: "The order could not be loaded." });
+    for (let i = 0; i < orders.length; i++) {
+        if (orders[i].id === req.params.id) {
+            order = orders[i];
+        }
     }
+
+    if (!order) {
+        return res.status(404).json({ error: "Order was not found." });
+    }
+    res.json(order);
 });
 
 app.get("/api/reviews", async function (req, res) {
