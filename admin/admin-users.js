@@ -3,9 +3,12 @@ document.addEventListener("DOMContentLoaded", function () {
     let currentUserId = "";
     let body = document.getElementById("user-table-body");
     let message = document.getElementById("admin-message");
+    let accessMessage = document.getElementById("admin-access-message");
+    let content = document.getElementById("admin-content");
 
-    function showMessage(text) {
+    function showMessage(text, type) {
         message.textContent = text;
+        message.className = "admin-message admin-message--" + type;
     }
 
     function updateTotals() {
@@ -92,24 +95,34 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("no-users").hidden = shown !== 0;
     }
 
-    async function loadUsers() {
+    async function loadUsers(doneMessage) {
         try {
             let response = await fetch("/api/admin/users");
             let data = await response.json();
             if (!response.ok) {
-                showMessage(data.message);
                 if (response.status === 401) {
+                    sessionStorage.setItem("textswap-login-return", "/admin/user-management.html");
                     window.location.href = "../account/login.html";
+                    return;
                 }
+                accessMessage.textContent = data.message || "Administrator access is required.";
+                accessMessage.className = "admin-access-message admin-access-message--error";
                 return;
             }
             users = data.users;
             currentUserId = data.currentUserId;
-            showMessage("Loaded " + users.length + " registered account(s). Passwords are never displayed here.");
+            accessMessage.hidden = true;
+            content.hidden = false;
+            if (doneMessage) {
+                showMessage(doneMessage, "success");
+            } else {
+                showMessage("Loaded " + users.length + " registered account(s). Passwords are never displayed here.", "success");
+            }
             updateTotals();
             render();
         } catch (err) {
-            showMessage("Could not connect to the server.");
+            accessMessage.textContent = "Could not connect to the server.";
+            accessMessage.className = "admin-access-message admin-access-message--error";
         }
     }
 
@@ -128,21 +141,46 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
         let nextStatus = button.getAttribute("data-next-status");
-        let username = button.getAttribute("data-name");
-        let answer = window.confirm("Change " + username + " to " + nextStatus + " status?");
-        if (!answer) {
-            return;
-        }
+        let oldText = button.textContent;
+        button.disabled = true;
+        button.textContent = "Updating...";
+        button.setAttribute("aria-busy", "true");
 
-        let response = await fetch("/api/admin/users/" + button.getAttribute("data-id") + "/status", {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ status: nextStatus })
-        });
-        let data = await response.json();
-        showMessage(data.message);
-        if (response.ok) {
-            await loadUsers();
+        try {
+            let response = await fetch("/api/admin/users/" + button.getAttribute("data-id") + "/status", {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ status: nextStatus })
+            });
+            let data = await response.json();
+
+            if (response.status === 401) {
+                sessionStorage.setItem("textswap-login-return", "/admin/user-management.html");
+                window.location.href = "../account/login.html";
+                return;
+            }
+            if (response.status === 403) {
+                body.innerHTML = "";
+                content.hidden = true;
+                accessMessage.hidden = false;
+                accessMessage.textContent = data.message || "Administrator access is required.";
+                accessMessage.className = "admin-access-message admin-access-message--error";
+                return;
+            }
+
+            showMessage(data.message || "Could not update the account.", response.ok ? "success" : "error");
+            if (response.ok) {
+                await loadUsers(data.message);
+            } else {
+                button.disabled = false;
+                button.textContent = oldText;
+                button.removeAttribute("aria-busy");
+            }
+        } catch (err) {
+            showMessage("Could not connect to the server.", "error");
+            button.disabled = false;
+            button.textContent = oldText;
+            button.removeAttribute("aria-busy");
         }
     });
 

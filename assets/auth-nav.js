@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         if (data.user.role === "admin") {
             let admin = document.createElement("a");
-            admin.href = "/admin/user-management.html";
+            admin.href = "/admin/dashboard.html";
             admin.className = "btn btn-outline";
             admin.textContent = "Admin";
             actions.appendChild(admin);

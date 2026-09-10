@@ -1,0 +1,106 @@
+.admin-access-message,
+.admin-message {
+    max-width: 760px;
+    margin: 0 auto var(--space-lg);
+    padding: var(--space-md);
+    border: 1px solid var(--color-border);
+    border-left: 5px solid var(--color-secondary);
+    border-radius: var(--radius-sm);
+    background: #fff8e7;
+}
+
+.admin-access-message--error,
+.admin-message--error {
+    color: #8b0000;
+    border-color: #b22222;
+    background: #fff4f4;
+}
+
+.admin-message--success {
+    color: var(--color-primary-dark);
+    border-color: var(--color-primary);
+    background: #f1fff1;
+}
+
+.admin-message--loading {
+    color: var(--color-text-muted);
+}
+
+.module-heading a {
+    color: var(--color-primary-dark);
+    text-decoration: underline;
+}
+
+.admin-summary-grid--dashboard {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.admin-dashboard-card {
+    margin-top: var(--space-xl);
+    padding: var(--space-lg);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-card);
+}
+
+.admin-dashboard-card h2 {
+    color: var(--color-primary-dark);
+    margin-bottom: var(--space-sm);
+}
+
+.admin-dashboard-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    margin-top: var(--space-lg);
+}
+
+.account-action:disabled {
+    cursor: wait;
+    opacity: 0.65;
+}
+
+@media (max-width: 700px) {
+    body[data-admin-page] .navbar {
+        flex-wrap: wrap;
+        gap: var(--space-md);
+        padding: var(--space-md);
+    }
+
+    body[data-admin-page] .navbar__logo {
+        order: 1;
+    }
+
+    body[data-admin-page] .navbar__actions {
+        order: 2;
+    }
+
+    body[data-admin-page] .navbar__links {
+        display: grid;
+        width: 100%;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        order: 3;
+        gap: var(--space-sm) var(--space-md);
+    }
+
+    .admin-summary-grid--dashboard {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-dashboard-actions {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .admin-dashboard-actions .btn {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+@media (max-width: 560px) {
+    body[data-admin-page] .navbar__actions .btn {
+        padding: var(--space-sm);
+    }
+}

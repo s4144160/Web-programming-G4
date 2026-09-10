@@ -13,7 +13,8 @@ const auth = require("./middleware/auth");
 
 const app = express();
 const port = process.env.PORT || 3000;
-mongoose.connect(process.env.MONGODB_URI, { dbName: "textswap" })
+const databaseName = process.env.MONGODB_DATABASE || "textswap";
+mongoose.connect(process.env.MONGODB_URI, { dbName: databaseName })
     .then(async function () {
         console.log("✅ MongoDB connected");
 
@@ -348,7 +349,9 @@ app.post("/api/account/deactivate", auth.requireLogin, async function (req, res)
 
 app.get("/api/admin/users", auth.requireAdmin, async function (req, res) {
     try {
-        let users = await User.find({}).select("-passwordHash").sort({ createdAt: -1 });
+        let users = await User.find({})
+            .select("username email name role status createdAt")
+            .sort({ createdAt: -1 });
         res.json({ users: users, currentUserId: req.user._id });
     } catch (err) {
         res.status(500).json({ message: "Could not load users." });
