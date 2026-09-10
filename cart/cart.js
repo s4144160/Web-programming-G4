@@ -212,6 +212,7 @@ function initialiseProductPage() {
                     <div class="product-card__footer">
                         <strong>${formatVND(product.price)}</strong>
                         <button type="button" class="product-add-button${addedId === product.id ? ' product-add-button--added' : ''}" data-product-id="${escapeHTML(product.id)}" ${pendingAdd ? 'disabled' : ''}>${pendingAdd === product.id ? 'Adding...' : addedId === product.id ? 'Added ✓' : 'Add to Cart'}</button>
+                        <button type="button" class="btn btn-outline product-wishlist-button" data-wishlist-product-id="${escapeHTML(product.id)}">♡ Save</button>
                     </div>
                 </div>
             </article>`;
