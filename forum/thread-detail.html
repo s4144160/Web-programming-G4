@@ -3,19 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>(Your Module's name) - TextSwap</title>
+    <title>Discussion - TextSwap</title>
     <link rel="stylesheet" href="../assets/base.css">
+    <link rel="stylesheet" href="forum.css">
 </head>
 <body>
-
     <header class="site-header">
         <nav class="navbar">
-            <div class="navbar__logo">
-                <a href="../index.html">📚 TextSwap</a>
-            </div>
+            <div class="navbar__logo"><a href="../index.html">📚 TextSwap</a></div>
             <ul class="navbar__links">
                 <li><a href="../index.html">Home</a></li>
-                <li><a href="../forum/forum-list.html" class="active">Discussion Forum</a></li>
+                <li><a href="forum-list.html" class="active" aria-current="page">Discussion Forum</a></li>
                 <li><a href="../cart/products.html">Shopping Cart</a></li>
                 <li><a href="../blog/blog-list.html">Blog</a></li>
                 <li><a href="../reviews/review-list.html">Reviews</a></li>
@@ -27,12 +25,58 @@
             </div>
         </nav>
     </header>
-<main>
 
-<!-- your page content goes here -->
+    <main class="forum-page">
+        <div class="container thread-detail-page">
+            <p><a class="forum-back-link" href="forum-list.html">&larr; Back to Discussion Forum</a></p>
+            <div id="thread-status" class="forum-status" role="status" aria-live="polite">Loading discussion...</div>
 
-</main>
-<footer class="site-footer">
+            <article id="root-post" class="root-post" aria-labelledby="thread-heading" hidden></article>
+
+            <section id="replies-section" class="replies-section" aria-labelledby="replies-heading" hidden>
+                <div class="forum-results-heading">
+                    <h2 id="replies-heading">Replies</h2>
+                    <p id="reply-count"></p>
+                </div>
+                <div id="reply-list" class="reply-list"></div>
+            </section>
+
+            <section id="reply-panel" class="reply-panel" aria-labelledby="reply-form-heading" hidden>
+                <h2 id="reply-form-heading">Post a Reply</h2>
+                <p id="reply-target" class="reply-target">Replying to the main discussion</p>
+                <button type="button" id="cancel-reply-target" class="forum-text-button" hidden>Reply to the main discussion instead</button>
+
+                <form id="reply-form" class="forum-form" novalidate>
+                    <div class="forum-field">
+                        <label for="reply-title">Reply title</label>
+                        <input type="text" id="reply-title" name="title" minlength="3" maxlength="120" required>
+                        <small id="reply-title-error" class="forum-error" aria-live="polite"></small>
+                    </div>
+                    <div class="forum-field">
+                        <label for="reply-content">Reply content</label>
+                        <textarea id="reply-content" name="content" rows="6" maxlength="3000" required></textarea>
+                        <small><span id="reply-content-count">0</span>/3000 characters</small>
+                        <small id="reply-content-error" class="forum-error" aria-live="polite"></small>
+                    </div>
+                    <div class="forum-field">
+                        <label for="reply-image">Image URL or project image path</label>
+                        <input type="text" id="reply-image" name="imageUrl" maxlength="500" placeholder="/assets/images/example.jpg" required>
+                        <small>Use an http(s) URL or a path beginning /assets/images/.</small>
+                        <small id="reply-image-error" class="forum-error" aria-live="polite"></small>
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="post-reply-button">Post Reply</button>
+                </form>
+            </section>
+
+            <div id="reply-login" class="forum-empty" hidden>
+                <h2>Join the discussion</h2>
+                <p>You can read publicly, but you must log in to post a reply.</p>
+                <a href="../account/login.html" class="btn btn-primary">Login to Reply</a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
         <div class="container">
             <p>&copy; 2026 TextSwap - Secondhand Textbook Exchange Platform</p>
             <p class="mt-sm">
@@ -42,5 +86,7 @@
             </p>
         </div>
     </footer>
+    <script src="../assets/auth-nav.js"></script>
+    <script src="thread-detail.js"></script>
 </body>
 </html>

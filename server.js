@@ -10,6 +10,7 @@ const Product = require("./models/Product");
 const Cart = require("./models/Cart");
 const Order = require("./models/Order");
 const auth = require("./middleware/auth");
+const forumRoutes = require("./routes/forum");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -61,6 +62,8 @@ app.use(session({
         maxAge: 1000 * 60 * 60 * 2
     }
 }));
+
+app.use("/api/forum", forumRoutes);
 
 function userData(user) {
     return {
