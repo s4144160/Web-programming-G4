@@ -3,44 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>(Your Module's name) - TextSwap</title>
+    <title>Create Blog Post - TextSwap</title>
     <link rel="stylesheet" href="../assets/base.css">
+    <link rel="stylesheet" href="blog.css">
 </head>
 <body>
-
     <header class="site-header">
         <nav class="navbar">
-            <div class="navbar__logo">
-                <a href="../index.html">📚 TextSwap</a>
-            </div>
+            <div class="navbar__logo"><a href="../index.html">📚 TextSwap</a></div>
             <ul class="navbar__links">
                 <li><a href="../index.html">Home</a></li>
                 <li><a href="../forum/forum-list.html">Discussion Forum</a></li>
                 <li><a href="../cart/products.html">Shopping Cart</a></li>
-                <li><a href="../blog/blog-list.html" class="active">Blog</a></li>
+                <li><a href="blog-list.html" class="active" aria-current="page">Blog</a></li>
                 <li><a href="../reviews/review-list.html">Reviews</a></li>
                 <li><a href="../wishlist/wishlist.html">Wishlist</a></li>
             </ul>
-            <div class="navbar__actions">
-                <a href="../account/login.html" class="btn btn-outline">Login</a>
-                <a href="../account/register.html" class="btn btn-primary">Sign Up</a>
-            </div>
+            <div class="navbar__actions"><a href="../account/login.html" class="btn btn-outline">Login</a><a href="../account/register.html" class="btn btn-primary">Sign Up</a></div>
         </nav>
     </header>
-<main>
 
-<!-- your page content goes here -->
-
-</main>
-<footer class="site-footer">
-        <div class="container">
-            <p>&copy; 2026 TextSwap - Secondhand Textbook Exchange Platform</p>
-            <p class="mt-sm">
-                <a href="../sitemap.html">Sitemap</a> |
-                <a href="../account/login.html">Login</a> |
-                <a href="../account/register.html">Register</a>
-            </p>
+    <main class="blog-page">
+        <div class="container blog-form-wrapper">
+            <p class="blog-eyebrow">SHARE WITH TEXTSWAP</p>
+            <h1>Create Blog Post</h1>
+            <p class="text-muted">Write a story, study tip or textbook guide for other students.</p>
+            <div id="new-post-status" class="blog-status" role="status" aria-live="polite">Checking your account...</div>
+            <div id="new-post-login" class="blog-empty" hidden>
+                <h2>Login required</h2>
+                <p>Please log in before creating a Blog post.</p>
+                <a class="btn btn-primary" href="../account/login.html">Go to Login</a>
+            </div>
+            <form id="new-post-form" class="blog-form" novalidate hidden>
+                <div class="blog-field">
+                    <label for="post-title">Title</label>
+                    <input id="post-title" name="title" type="text" required minlength="3" maxlength="150">
+                    <small>Use a clear title between 3 and 150 characters.</small>
+                    <small id="post-title-error" class="blog-error" aria-live="polite"></small>
+                </div>
+                <div class="blog-field">
+                    <label for="post-tags">Tags/categories</label>
+                    <input id="post-tags" name="tags" type="text" required maxlength="320" placeholder="study tips, finance, textbooks">
+                    <small>Add 1 to 10 tags separated by commas.</small>
+                    <small id="post-tags-error" class="blog-error" aria-live="polite"></small>
+                </div>
+                <div class="blog-field">
+                    <label for="post-content">Main content</label>
+                    <textarea id="post-content" name="content" rows="12" required minlength="10" maxlength="10000"></textarea>
+                    <small id="post-content-count">0/10000 characters</small>
+                    <small id="post-content-error" class="blog-error" aria-live="polite"></small>
+                </div>
+                <div class="blog-field">
+                    <label for="post-image">Image URL or project image path</label>
+                    <input id="post-image" name="imageUrl" type="text" required maxlength="500" placeholder="/assets/images/example.jpg">
+                    <small>Use an http(s) URL or a path beginning /assets/images/.</small>
+                    <small id="post-image-error" class="blog-error" aria-live="polite"></small>
+                </div>
+                <div class="blog-form-actions">
+                    <button id="publish-post-button" class="btn btn-primary" type="submit">Publish Post</button>
+                    <a class="btn btn-outline" href="blog-list.html">Cancel</a>
+                </div>
+            </form>
         </div>
-    </footer>
+    </main>
+
+    <footer class="site-footer"><div class="container"><p>&copy; 2026 TextSwap - Secondhand Textbook Exchange Platform</p><p class="mt-sm"><a href="../sitemap.html">Sitemap</a> | <a href="../account/login.html">Login</a> | <a href="../account/register.html">Register</a></p></div></footer>
+    <script src="../assets/auth-nav.js"></script>
+    <script src="new-post.js"></script>
 </body>
 </html>
