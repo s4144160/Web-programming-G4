@@ -6,8 +6,9 @@
     <title>User Administration - TextSwap</title>
     <link rel="stylesheet" href="../assets/base.css">
     <link rel="stylesheet" href="../assets/cart-admin.css">
+    <link rel="stylesheet" href="admin.css">
 </head>
-<body>
+<body data-admin-page="users">
 
     <header class="site-header">
         <nav class="navbar">
@@ -30,13 +31,17 @@
     </header>
 <main>
     <div class="container admin-page">
+        <div id="admin-access-message" class="admin-access-message" role="status" aria-live="polite">Checking administrator access...</div>
+
+        <div id="admin-content" hidden>
         <header class="module-heading">
             <p class="module-heading__eyebrow">Administration workspace</p>
             <h1>User Administration</h1>
             <p>Review member access and lock or unlock user accounts. Locked users remain visible but cannot log in to TextSwap.</p>
+            <p><a href="dashboard.html">Return to Administration dashboard</a></p>
         </header>
 
-        <div id="admin-message" class="admin-warning" role="alert">Loading registered users...</div>
+        <div id="admin-message" class="admin-message admin-message--loading" role="status" aria-live="polite">Loading registered users...</div>
 
         <section aria-labelledby="account-summary-heading">
             <h2 id="account-summary-heading" class="cart-admin-visually-hidden">Account summary</h2>
@@ -121,6 +126,7 @@
             </div>
             <p id="no-users" class="admin-warning" hidden>No users match the current filters.</p>
         </section>
+        </div>
     </div>
 </main>
 <footer class="site-footer">

@@ -141,8 +141,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 sessionStorage.removeItem("textswap-login-return");
                 if (returnUrl && returnUrl.indexOf("/cart/") === 0) {
                     window.location.href = returnUrl;
+                } else if (returnUrl && returnUrl.indexOf("/admin/") === 0 && result.data.user.role === "admin") {
+                    window.location.href = returnUrl;
                 } else if (result.data.user.role === "admin") {
-                    window.location.href = "../admin/user-management.html";
+                    window.location.href = "../admin/dashboard.html";
                 } else {
                     window.location.href = "profile.html";
                 }

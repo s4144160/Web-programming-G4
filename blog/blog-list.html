@@ -3,21 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>(Your Module's name) - TextSwap</title>
+    <title>Blog - TextSwap</title>
     <link rel="stylesheet" href="../assets/base.css">
+    <link rel="stylesheet" href="blog.css">
 </head>
 <body>
-
     <header class="site-header">
         <nav class="navbar">
-            <div class="navbar__logo">
-                <a href="../index.html">📚 TextSwap</a>
-            </div>
+            <div class="navbar__logo"><a href="../index.html">📚 TextSwap</a></div>
             <ul class="navbar__links">
                 <li><a href="../index.html">Home</a></li>
                 <li><a href="../forum/forum-list.html">Discussion Forum</a></li>
                 <li><a href="../cart/products.html">Shopping Cart</a></li>
-                <li><a href="../blog/blog-list.html" class="active">Blog</a></li>
+                <li><a href="blog-list.html" class="active" aria-current="page">Blog</a></li>
                 <li><a href="../reviews/review-list.html">Reviews</a></li>
                 <li><a href="../wishlist/wishlist.html">Wishlist</a></li>
             </ul>
@@ -27,20 +25,74 @@
             </div>
         </nav>
     </header>
-<main>
 
-<!-- your page content goes here -->
+    <main class="blog-page">
+        <section class="blog-heading">
+            <div class="container blog-heading__row">
+                <div>
+                    <p class="blog-eyebrow">TEXTSWAP STORIES</p>
+                    <h1>Blog</h1>
+                    <p>Read study advice, textbook stories and ideas shared by the TextSwap community.</p>
+                </div>
+                <a class="btn btn-primary" href="new-post.html">Create Blog Post</a>
+            </div>
+        </section>
 
-</main>
-<footer class="site-footer">
+        <div class="container">
+            <form id="blog-search-form" class="blog-toolbar" role="search">
+                <div class="blog-field blog-field--search">
+                    <label for="blog-search">Search Blog posts</label>
+                    <input id="blog-search" name="search" type="search" maxlength="100" placeholder="Search title, author, content, tags or image">
+                </div>
+                <div class="blog-field">
+                    <label for="blog-search-field">Search in</label>
+                    <select id="blog-search-field" name="field">
+                        <option value="all">All fields</option>
+                        <option value="title">Title</option>
+                        <option value="author">Author</option>
+                        <option value="content">Content</option>
+                        <option value="tags">Tags</option>
+                        <option value="image">Image path</option>
+                    </select>
+                </div>
+                <div class="blog-field">
+                    <label for="blog-tag">Tag/category</label>
+                    <select id="blog-tag" name="tag"><option value="">All tags</option></select>
+                </div>
+                <div class="blog-field">
+                    <label for="blog-sort">Sort by</label>
+                    <select id="blog-sort" name="sort">
+                        <option value="newest">Newest first</option>
+                        <option value="oldest">Oldest first</option>
+                    </select>
+                </div>
+                <div class="blog-field">
+                    <label for="blog-from">From date</label>
+                    <input id="blog-from" name="from" type="date">
+                </div>
+                <div class="blog-field">
+                    <label for="blog-to">To date</label>
+                    <input id="blog-to" name="to" type="date">
+                </div>
+                <button class="btn btn-outline" type="submit">Search</button>
+            </form>
+
+            <div id="blog-status" class="blog-status" role="status" aria-live="polite">Loading Blog posts...</div>
+            <div class="blog-results-heading">
+                <h2>Community Blog posts</h2>
+                <p id="blog-result-count">0 posts</p>
+            </div>
+            <section id="blog-post-list" class="blog-list" aria-label="Blog posts"></section>
+        </div>
+    </main>
+
+    <footer class="site-footer">
         <div class="container">
             <p>&copy; 2026 TextSwap - Secondhand Textbook Exchange Platform</p>
-            <p class="mt-sm">
-                <a href="../sitemap.html">Sitemap</a> |
-                <a href="../account/login.html">Login</a> |
-                <a href="../account/register.html">Register</a>
-            </p>
+            <p class="mt-sm"><a href="../sitemap.html">Sitemap</a> | <a href="../account/login.html">Login</a> | <a href="../account/register.html">Register</a></p>
         </div>
     </footer>
+    <script src="../assets/auth-nav.js"></script>
+    <script src="blog-list.js"></script>
 </body>
 </html>

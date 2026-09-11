@@ -3,19 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>(Your Module's name) - TextSwap</title>
+    <title>New Discussion - TextSwap</title>
     <link rel="stylesheet" href="../assets/base.css">
+    <link rel="stylesheet" href="forum.css">
 </head>
 <body>
-
     <header class="site-header">
         <nav class="navbar">
-            <div class="navbar__logo">
-                <a href="../index.html">📚 TextSwap</a>
-            </div>
+            <div class="navbar__logo"><a href="../index.html">📚 TextSwap</a></div>
             <ul class="navbar__links">
                 <li><a href="../index.html">Home</a></li>
-                <li><a href="../forum/forum-list.html" class="active">Discussion Forum</a></li>
+                <li><a href="forum-list.html" class="active" aria-current="page">Discussion Forum</a></li>
                 <li><a href="../cart/products.html">Shopping Cart</a></li>
                 <li><a href="../blog/blog-list.html">Blog</a></li>
                 <li><a href="../reviews/review-list.html">Reviews</a></li>
@@ -27,12 +25,56 @@
             </div>
         </nav>
     </header>
-<main>
 
-<!-- your page content goes here -->
+    <main class="forum-page">
+        <section class="forum-heading">
+            <div class="container">
+                <p class="forum-eyebrow">Start a conversation</p>
+                <h1>New Discussion</h1>
+                <p>Create a thread that other TextSwap members can reply to.</p>
+            </div>
+        </section>
 
-</main>
-<footer class="site-footer">
+        <div class="container forum-form-wrapper">
+            <div id="new-thread-status" class="forum-status" role="status" aria-live="polite">Checking your account...</div>
+            <div id="new-thread-login" class="forum-empty" hidden>
+                <h2>Login required</h2>
+                <p>You need a TextSwap account to create a discussion.</p>
+                <a href="../account/login.html" class="btn btn-primary">Go to Login</a>
+                <a href="forum-list.html" class="btn btn-outline">Back to Forum</a>
+            </div>
+
+            <form id="new-thread-form" class="forum-form" novalidate hidden>
+                <div class="forum-field">
+                    <label for="thread-title">Thread title or subject</label>
+                    <input type="text" id="thread-title" name="title" minlength="3" maxlength="120" aria-describedby="thread-title-help thread-title-error" required>
+                    <small id="thread-title-help">Use a clear title between 3 and 120 characters.</small>
+                    <small id="thread-title-error" class="forum-error" aria-live="polite"></small>
+                </div>
+
+                <div class="forum-field">
+                    <label for="thread-content">Post content</label>
+                    <textarea id="thread-content" name="content" rows="9" maxlength="3000" aria-describedby="thread-content-help thread-content-error" required></textarea>
+                    <small id="thread-content-help"><span id="thread-content-count">0</span>/3000 characters</small>
+                    <small id="thread-content-error" class="forum-error" aria-live="polite"></small>
+                </div>
+
+                <div class="forum-field">
+                    <label for="thread-image">Image URL or project image path (optional)</label>
+                    <input type="text" id="thread-image" name="imageUrl" maxlength="500" placeholder="/assets/images/example.jpg" aria-describedby="thread-image-help thread-image-error">
+                    <small id="thread-image-help">Leave blank, or use an http(s) URL or a path beginning /assets/images/.</small>
+                    <small id="thread-image-error" class="forum-error" aria-live="polite"></small>
+                </div>
+
+                <div class="forum-form-actions">
+                    <button type="submit" class="btn btn-primary" id="create-thread-button">Create Discussion</button>
+                    <a href="forum-list.html" class="btn btn-outline">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <footer class="site-footer">
         <div class="container">
             <p>&copy; 2026 TextSwap - Secondhand Textbook Exchange Platform</p>
             <p class="mt-sm">
@@ -42,5 +84,7 @@
             </p>
         </div>
     </footer>
+    <script src="../assets/auth-nav.js"></script>
+    <script src="new-thread.js"></script>
 </body>
 </html>

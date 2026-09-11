@@ -3,44 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>(Your Module's name) - TextSwap</title>
+    <title>Blog Post - TextSwap</title>
     <link rel="stylesheet" href="../assets/base.css">
+    <link rel="stylesheet" href="blog.css">
 </head>
 <body>
-
     <header class="site-header">
         <nav class="navbar">
-            <div class="navbar__logo">
-                <a href="../index.html">📚 TextSwap</a>
-            </div>
+            <div class="navbar__logo"><a href="../index.html">📚 TextSwap</a></div>
             <ul class="navbar__links">
                 <li><a href="../index.html">Home</a></li>
                 <li><a href="../forum/forum-list.html">Discussion Forum</a></li>
                 <li><a href="../cart/products.html">Shopping Cart</a></li>
-                <li><a href="../blog/blog-list.html" class="active">Blog</a></li>
+                <li><a href="blog-list.html" class="active" aria-current="page">Blog</a></li>
                 <li><a href="../reviews/review-list.html">Reviews</a></li>
                 <li><a href="../wishlist/wishlist.html">Wishlist</a></li>
             </ul>
-            <div class="navbar__actions">
-                <a href="../account/login.html" class="btn btn-outline">Login</a>
-                <a href="../account/register.html" class="btn btn-primary">Sign Up</a>
-            </div>
+            <div class="navbar__actions"><a href="../account/login.html" class="btn btn-outline">Login</a><a href="../account/register.html" class="btn btn-primary">Sign Up</a></div>
         </nav>
     </header>
-<main>
 
-<!-- your page content goes here -->
-
-</main>
-<footer class="site-footer">
-        <div class="container">
-            <p>&copy; 2026 TextSwap - Secondhand Textbook Exchange Platform</p>
-            <p class="mt-sm">
-                <a href="../sitemap.html">Sitemap</a> |
-                <a href="../account/login.html">Login</a> |
-                <a href="../account/register.html">Register</a>
-            </p>
+    <main class="blog-page">
+        <div class="container blog-detail-page">
+            <p><a class="blog-back-link" href="blog-list.html">&larr; Back to Blog</a></p>
+            <div id="detail-status" class="blog-status" role="status" aria-live="polite">Loading Blog post...</div>
+            <article id="blog-post" class="blog-post" hidden></article>
+            <section id="edit-section" class="blog-edit-section" aria-labelledby="edit-heading" hidden></section>
+            <section id="comments-section" class="blog-comments" aria-labelledby="comments-heading" hidden>
+                <div class="blog-results-heading"><h2 id="comments-heading">Comments</h2><p id="comment-count">0 comments</p></div>
+                <div id="comment-list" class="comment-list"></div>
+                <div id="comment-form-panel" class="comment-form-panel" hidden>
+                    <h3>Add a Comment</h3>
+                    <form id="comment-form" class="blog-form" novalidate>
+                        <div class="blog-field">
+                            <label for="comment-content">Comment</label>
+                            <textarea id="comment-content" name="content" rows="5" required maxlength="1000"></textarea>
+                            <small id="comment-count-text">0/1000 characters</small>
+                            <small id="comment-error" class="blog-error" aria-live="polite"></small>
+                        </div>
+                        <button id="comment-button" class="btn btn-primary" type="submit">Post Comment</button>
+                    </form>
+                </div>
+                <div id="comment-login" class="blog-empty" hidden>
+                    <p>Please log in to add a comment.</p>
+                    <a class="btn btn-primary" href="../account/login.html">Login to Comment</a>
+                </div>
+            </section>
         </div>
-    </footer>
+    </main>
+
+    <footer class="site-footer"><div class="container"><p>&copy; 2026 TextSwap - Secondhand Textbook Exchange Platform</p><p class="mt-sm"><a href="../sitemap.html">Sitemap</a> | <a href="../account/login.html">Login</a> | <a href="../account/register.html">Register</a></p></div></footer>
+    <script src="../assets/auth-nav.js"></script>
+    <script src="blog-detail.js"></script>
 </body>
 </html>

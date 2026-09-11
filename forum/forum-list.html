@@ -3,19 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>(Your Module's name) - TextSwap</title>
+    <title>Discussion Forum - TextSwap</title>
     <link rel="stylesheet" href="../assets/base.css">
+    <link rel="stylesheet" href="forum.css">
 </head>
 <body>
-
     <header class="site-header">
         <nav class="navbar">
-            <div class="navbar__logo">
-                <a href="../index.html">📚 TextSwap</a>
-            </div>
+            <div class="navbar__logo"><a href="../index.html">📚 TextSwap</a></div>
             <ul class="navbar__links">
                 <li><a href="../index.html">Home</a></li>
-                <li><a href="../forum/forum-list.html" class="active">Discussion Forum</a></li>
+                <li><a href="forum-list.html" class="active" aria-current="page">Discussion Forum</a></li>
                 <li><a href="../cart/products.html">Shopping Cart</a></li>
                 <li><a href="../blog/blog-list.html">Blog</a></li>
                 <li><a href="../reviews/review-list.html">Reviews</a></li>
@@ -27,12 +25,54 @@
             </div>
         </nav>
     </header>
-<main>
 
-<!-- your page content goes here -->
+    <main class="forum-page">
+        <section class="forum-heading">
+            <div class="container forum-heading__row">
+                <div>
+                    <p class="forum-eyebrow">TextSwap community</p>
+                    <h1>Discussion Forum</h1>
+                    <p>Ask questions, exchange textbook advice and reply to other students.</p>
+                </div>
+                <a class="btn btn-primary" href="new-thread.html">New Discussion</a>
+            </div>
+        </section>
 
-</main>
-<footer class="site-footer">
+        <div class="container">
+            <form class="forum-toolbar" id="forum-search-form" role="search">
+                <div class="forum-field forum-field--search">
+                    <label for="forum-search">Search discussions</label>
+                    <input type="search" id="forum-search" name="search" maxlength="100" placeholder="Search titles and post content">
+                </div>
+                <div class="forum-field">
+                    <label for="forum-search-field">Search in</label>
+                    <select id="forum-search-field" name="field">
+                        <option value="all">Titles and content</option>
+                        <option value="title">Thread titles</option>
+                        <option value="content">Post and reply content</option>
+                    </select>
+                </div>
+                <div class="forum-field">
+                    <label for="forum-sort">Sort by</label>
+                    <select id="forum-sort" name="sort">
+                        <option value="recent">Most recent activity</option>
+                        <option value="oldest">Oldest threads</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-outline">Search</button>
+            </form>
+
+            <div class="forum-results-heading">
+                <h2>Community discussions</h2>
+                <p id="forum-result-count">Loading discussions...</p>
+            </div>
+
+            <div id="forum-list-status" class="forum-status" role="status" aria-live="polite">Loading Forum threads...</div>
+            <section id="forum-thread-list" class="thread-list" aria-label="Forum threads" aria-busy="true"></section>
+        </div>
+    </main>
+
+    <footer class="site-footer">
         <div class="container">
             <p>&copy; 2026 TextSwap - Secondhand Textbook Exchange Platform</p>
             <p class="mt-sm">
@@ -42,5 +82,7 @@
             </p>
         </div>
     </footer>
+    <script src="../assets/auth-nav.js"></script>
+    <script src="forum-list.js"></script>
 </body>
 </html>
