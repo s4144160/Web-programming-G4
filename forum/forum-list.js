@@ -53,17 +53,19 @@ function renderThreads(items) {
         let card = document.createElement("article");
         card.className = "thread-card";
 
-        let imageLink = document.createElement("a");
-        imageLink.href = "thread-detail.html?id=" + encodeURIComponent(thread.id);
-        imageLink.className = "thread-card__image";
-        let image = document.createElement("img");
-        image.src = thread.imageUrl;
-        image.alt = "Image for discussion: " + thread.title;
-        image.addEventListener("error", function () {
-            imageLink.hidden = true;
-        });
-        imageLink.appendChild(image);
-        card.appendChild(imageLink);
+        if (thread.imageUrl) {
+            let imageLink = document.createElement("a");
+            imageLink.href = "thread-detail.html?id=" + encodeURIComponent(thread.id);
+            imageLink.className = "thread-card__image";
+            let image = document.createElement("img");
+            image.src = thread.imageUrl;
+            image.alt = "Image for discussion: " + thread.title;
+            image.addEventListener("error", function () {
+                imageLink.hidden = true;
+            });
+            imageLink.appendChild(image);
+            card.appendChild(imageLink);
+        }
 
         let body = document.createElement("div");
         body.className = "thread-card__body";

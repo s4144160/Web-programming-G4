@@ -16,9 +16,9 @@ const replySchema = new mongoose.Schema({
     },
     imageUrl: {
         type: String,
-        required: true,
         trim: true,
-        maxlength: 500
+        maxlength: 500,
+        default: ""
     },
     authorId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -70,9 +70,9 @@ const forumThreadSchema = new mongoose.Schema({
     },
     imageUrl: {
         type: String,
-        required: true,
         trim: true,
-        maxlength: 500
+        maxlength: 500,
+        default: ""
     },
     authorId: {
         type: mongoose.Schema.Types.ObjectId,

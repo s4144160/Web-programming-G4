@@ -10,6 +10,9 @@ const submitButton = document.querySelector("#create-thread-button");
 let submitting = false;
 
 function validImage(value) {
+    if (!value) {
+        return true;
+    }
     if (/^https?:\/\/[^\s]+$/i.test(value)) {
         return true;
     }

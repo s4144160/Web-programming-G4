@@ -35,9 +35,7 @@ function validatePost(body) {
     if (values.content.length < 1 || values.content.length > 3000) {
         errors.push("Post content must be between 1 and 3000 characters.");
     }
-    if (!values.imageUrl) {
-        errors.push("An image URL or project image path is required.");
-    } else if (values.imageUrl.length > 500 || !validImageUrl(values.imageUrl)) {
+    if (values.imageUrl && (values.imageUrl.length > 500 || !validImageUrl(values.imageUrl))) {
         errors.push("Use a valid http(s) image URL or /assets/images/ project path.");
     }
 

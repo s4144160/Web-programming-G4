@@ -49,6 +49,9 @@ function wasEdited(post) {
 }
 
 function validImage(value) {
+    if (!value) {
+        return true;
+    }
     if (/^https?:\/\/[^\s]+$/i.test(value)) {
         return true;
     }
@@ -88,6 +91,9 @@ async function requestJson(url, options) {
 }
 
 function addPostImage(parent, imageUrl, title) {
+    if (!imageUrl) {
+        return;
+    }
     let image = document.createElement("img");
     image.className = "forum-post-image";
     image.src = imageUrl;
@@ -150,7 +156,7 @@ function addActions(parent, post, kind) {
     }
 }
 
-function createEditField(labelText, type, value, maxLength) {
+function createEditField(labelText, type, value, maxLength, optional) {
     let wrapper = makeElement("div", "forum-field");
     let id = "edit-" + type + "-" + Math.random().toString(16).slice(2);
     let label = makeElement("label", "", labelText);
@@ -169,7 +175,7 @@ function createEditField(labelText, type, value, maxLength) {
     input.name = type;
     input.value = value;
     input.maxLength = maxLength;
-    input.required = true;
+    input.required = optional !== true;
     wrapper.appendChild(input);
     return wrapper;
 }
@@ -185,7 +191,7 @@ function showEditForm(parent, post, kind) {
     form.appendChild(heading);
     form.appendChild(createEditField("Title", "title", post.title, 120));
     form.appendChild(createEditField("Post content", "content", post.content, 3000));
-    form.appendChild(createEditField("Image URL or path", "imageUrl", post.imageUrl, 500));
+    form.appendChild(createEditField("Image URL or path (optional)", "imageUrl", post.imageUrl || "", 500, true));
     let formStatus = makeElement("p", "forum-error");
     formStatus.setAttribute("role", "status");
     formStatus.setAttribute("aria-live", "polite");

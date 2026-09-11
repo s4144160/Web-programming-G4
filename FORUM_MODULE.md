@@ -16,7 +16,7 @@ This branch adds the MongoDB-backed Discussion Forum without changing the other 
 
 The `forumthreads` collection uses one document per discussion. The root document stores:
 
-- `title`, `content` and required `imageUrl`
+- required `title` and `content`, plus optional `imageUrl`
 - `authorId` and the display snapshot `authorName`
 - `createdAt`, `updatedAt` and `lastActivityAt`
 - `isDeleted` and `deletedAt`
@@ -40,13 +40,13 @@ Deletes are soft deletes. The database record remains with `isDeleted: true`, bu
 | DELETE | `/api/forum/threads/:threadId/replies/:replyId` | Owner | Soft-delete a reply without removing its children. |
 | GET | `/api/forum/sitemap` | No | Return links for visible Forum threads and replies. |
 
-POST and PUT requests validate title length, content length and the image URL/path again on the server. The server also validates MongoDB IDs and nested parent IDs. It gets the author from `req.user`, so the browser cannot choose another user as the author. The existing `requireLogin` middleware also rejects locked and deactivated accounts.
+POST and PUT requests validate title length, content length and any supplied image URL/path again on the server. Images are optional. The server also validates MongoDB IDs and nested parent IDs. It gets the author from `req.user`, so the browser cannot choose another user as the author. The existing `requireLogin` middleware also rejects locked and deactivated accounts.
 
 ## Account and page integration
 
 The pages load `assets/auth-nav.js`, so the shared header changes between Login/Sign Up and Profile/Logout using `GET /api/account/me`. The Forum uses the same endpoint to decide whether to show the reply form and owner actions. Public reads do not need a session.
 
-All post content is inserted with DOM `textContent`. User-entered HTML is displayed as ordinary text rather than executed. The image field accepts an `http://` or `https://` URL, or a local path beginning `/assets/images/` with no `..` path segment.
+All post content is inserted with DOM `textContent`. User-entered HTML is displayed as ordinary text rather than executed. The optional image field accepts an `http://` or `https://` URL, or a local path beginning `/assets/images/` with no `..` path segment.
 
 ## Run locally
 
@@ -59,7 +59,7 @@ All post content is inserted with DOM `textContent`. User-entered HTML is displa
 
 1. Log out and open the Forum list and a thread. Both should be readable.
 2. Open New Discussion while logged out. The page should ask for login and not show an active create form.
-3. Register or log in, then create a thread with a title, content and valid image URL/path.
+3. Register or log in, then create a thread with a title and content. Confirm the optional image can be left blank.
 4. Open the thread and add a reply. Reply again to that reply and confirm the second reply is indented below it.
 5. Refresh the page and restart Node. Confirm the thread and replies still exist.
 6. Edit your thread and one of your replies. The edited label and new text should remain after refresh.
