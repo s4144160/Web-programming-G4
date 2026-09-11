@@ -12,6 +12,7 @@ const Order = require("./models/Order");
 const auth = require("./middleware/auth");
 const forumRoutes = require("./routes/forum");
 const blogRoutes = require("./routes/blog");
+const wishlistRoutes = require("./routes/wishlist");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -66,6 +67,7 @@ app.use(session({
 
 app.use("/api/forum", forumRoutes);
 app.use("/api/blog", blogRoutes);
+app.use("/api/wishlist", wishlistRoutes);
 
 function userData(user) {
     return {

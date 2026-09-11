@@ -3,23 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>(Your Module's name) - TextSwap</title>
+    <title>My Wishlist - TextSwap</title>
     <link rel="stylesheet" href="../assets/base.css">
+    <link rel="stylesheet" href="wishlist.css">
+    <script src="wishlist.js" defer></script>
 </head>
 <body>
-
     <header class="site-header">
         <nav class="navbar">
-            <div class="navbar__logo">
-                <a href="../index.html">📚 TextSwap</a>
-            </div>
+            <div class="navbar__logo"><a href="../index.html">📚 TextSwap</a></div>
             <ul class="navbar__links">
                 <li><a href="../index.html">Home</a></li>
                 <li><a href="../forum/forum-list.html">Discussion Forum</a></li>
                 <li><a href="../cart/products.html">Shopping Cart</a></li>
                 <li><a href="../blog/blog-list.html">Blog</a></li>
                 <li><a href="../reviews/review-list.html">Reviews</a></li>
-                <li><a href="../wishlist/wishlist.html">Wishlist</a></li>
+                <li><a href="../wishlist/wishlist.html" class="active">Wishlist</a></li>
             </ul>
             <div class="navbar__actions">
                 <a href="../account/login.html" class="btn btn-outline">Login</a>
@@ -27,20 +26,82 @@
             </div>
         </nav>
     </header>
-<main>
 
-<!-- your page content goes here -->
+    <main class="wishlist-page">
+        <div class="container">
+            <header class="wishlist-heading">
+                <p class="wishlist-eyebrow">Your saved textbooks</p>
+                <h1>My Wishlist</h1>
+                <p>Keep track of books you are interested in, then move them to your cart when you are ready.</p>
+                <a href="../cart/products.html" class="btn btn-primary">Browse Textbooks</a>
+            </header>
 
-</main>
-<footer class="site-footer">
+            <p class="wishlist-message" data-wishlist-message role="status" aria-live="polite">Loading your wishlist...</p>
+
+            <section class="wishlist-login" data-wishlist-login hidden aria-labelledby="wishlist-login-heading">
+                <h2 id="wishlist-login-heading">Login required</h2>
+                <p>Please log in to view your wishlist.</p>
+                <a class="btn btn-primary" href="../account/login.html">Go to Login</a>
+            </section>
+
+            <div data-wishlist-content hidden>
+                <section class="wishlist-controls" aria-labelledby="wishlist-controls-heading">
+                    <div>
+                        <h2 id="wishlist-controls-heading">Find saved items</h2>
+                        <p data-wishlist-count>0 items</p>
+                    </div>
+                    <form data-wishlist-filters action="#">
+                        <div class="wishlist-field wishlist-field--search">
+                            <label for="wishlist-search">Search by title or author</label>
+                            <input id="wishlist-search" type="search" placeholder="e.g. Python Crash Course">
+                        </div>
+                        <div class="wishlist-field">
+                            <label for="wishlist-status">Status</label>
+                            <select id="wishlist-status">
+                                <option value="all">All statuses</option>
+                                <option value="saved">Saved</option>
+                                <option value="moved-to-cart">Moved to cart</option>
+                                <option value="purchased">Purchased</option>
+                            </select>
+                        </div>
+                        <div class="wishlist-field">
+                            <label for="wishlist-sort">Sort by</label>
+                            <select id="wishlist-sort">
+                                <option value="newest">Date saved: newest</option>
+                                <option value="oldest">Date saved: oldest</option>
+                                <option value="title">Title</option>
+                                <option value="price-low">Price: low to high</option>
+                                <option value="price-high">Price: high to low</option>
+                            </select>
+                        </div>
+                    </form>
+                </section>
+
+                <section class="wishlist-section" aria-labelledby="active-wishlist-heading">
+                    <div class="wishlist-section__heading">
+                        <div><p class="wishlist-eyebrow">Ready when you are</p><h2 id="active-wishlist-heading">Active Wishlist</h2></div>
+                        <span data-active-count>0 items</span>
+                    </div>
+                    <div class="wishlist-grid" data-active-wishlist></div>
+                </section>
+
+                <section class="wishlist-section wishlist-section--history" aria-labelledby="wishlist-history-heading">
+                    <div class="wishlist-section__heading">
+                        <div><p class="wishlist-eyebrow">Previous choices</p><h2 id="wishlist-history-heading">Purchased / History</h2></div>
+                        <span data-history-count>0 items</span>
+                    </div>
+                    <div class="wishlist-grid" data-wishlist-history></div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
         <div class="container">
             <p>&copy; 2026 TextSwap - Secondhand Textbook Exchange Platform</p>
-            <p class="mt-sm">
-                <a href="../sitemap.html">Sitemap</a> |
-                <a href="../account/login.html">Login</a> |
-                <a href="../account/register.html">Register</a>
-            </p>
+            <p class="mt-sm"><a href="../sitemap.html">Sitemap</a> | <a href="../account/login.html">Login</a> | <a href="../account/register.html">Register</a></p>
         </div>
     </footer>
+    <script src="../assets/auth-nav.js"></script>
 </body>
 </html>
