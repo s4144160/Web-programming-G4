@@ -3,10 +3,10 @@ COSC3060 Web Programming Studio - Group Assignment (Web Programming G4)
 
 ## Team Members & Module Responsibilities
 
-| Name | Individual Module | Additional Shared Task | Files/Folders Responsible |
+| Name | Individual Modules | Additional Shared Tasks | Files/Folders Responsible |
 |---|---|---|---|
-| Hai Nguyen Huu Nam | Shopping Cart | Admin (2 pages) | /cart, /admin | Discussion Forum | User Account System | /forum, /account | Wishlist (leftover 5th module, lead)| /wishlist |
-| David Huang | Reviews & Ratings | Sitemap | /reviews, /sitemap.html | Blog | Wishlist (leftover 5th module, lead) | /blog, /wishlist | Discussion Forum | /forum |
+| Hai Nguyen Huu Nam | Shopping Cart<br>Discussion Forum<br>Wishlist (leftover 5th module, lead) | Admin (2 pages)<br>User Account System | `/cart`, `/admin`<br>`/forum`, `/account`<br>`/wishlist` |
+| David Huang | Reviews & Ratings<br>Blog<br>Discussion Forum | Sitemap<br>Wishlist (leftover 5th module, lead) | `/reviews`, `/sitemap.html`<br>`/blog`, `/wishlist`<br>`/forum` |
 
 ## Additional Contributions
 
